@@ -1,0 +1,56 @@
+---
+---
+<section class="about-section">
+  <div class="container about-container">
+    <div class="about-content">
+      <span class="label-mono about-label">Sobre mí</span>
+      <!-- PLACEHOLDER: Sobre mí descripción -->
+      <p class="about-text">
+        Periodista con más de 25 años de trayectoria en el mundo del vino y la gastronomía. 
+        Trabajo con viñas, medios y marcas que quieren comunicar con profundidad y credibilidad. 
+        También organizo ferias y eventos que conectan productores con audiencias.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: var(--section-padding-vertical-mobile) 0;
+    background-color: var(--accent-lt);
+    border-top: 1px solid var(--border);
+  }
+
+  .about-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .about-content {
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .about-label {
+    display: block;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .about-text {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg); /* 20px */
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    .about-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+    
+    .about-text {
+      font-size: 22px;
+    }
+  }
+</style>

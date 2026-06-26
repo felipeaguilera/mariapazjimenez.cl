@@ -1,0 +1,114 @@
+---
+---
+<section class="hero-section">
+  <div class="container hero-container">
+    <div class="hero-image-wrapper">
+      <!-- PLACEHOLDER: foto de María Paz, proporción 4:5 o cuadrada -->
+      <img src="/assets/MariaPaz-Portrait.png" alt="María Paz Jiménez" class="hero-image" width="440" height="550" />
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">María Paz Jiménez</h1>
+      <div class="hero-divider"></div>
+      <p class="hero-subtitle">Periodista y comunicadora especialista en vino y gastronomía</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding: var(--section-padding-vertical-mobile) 0;
+    background-color: var(--bg);
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .hero-image-wrapper {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    aspect-ratio: 4/5;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: var(--text-2xl); /* 42px on mobile */
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background-color: var(--accent);
+    margin: 0 auto 24px auto;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* Desktop layout (768px and up) */
+  @media (min-width: 768px) {
+    .hero-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+
+    .hero-container {
+      flex-direction: row-reverse; /* image right, text left */
+      align-items: center;
+      gap: 64px;
+    }
+
+    .hero-image-wrapper {
+      flex: 1;
+      max-width: 440px;
+      margin: 0;
+    }
+
+    .hero-content {
+      flex: 1.2;
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .hero-title {
+      font-size: var(--text-3xl); /* 60px on desktop */
+      margin-bottom: 20px;
+    }
+
+    .hero-divider {
+      margin: 0 0 28px 0;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      margin: 0;
+      max-width: none;
+    }
+  }
+</style>

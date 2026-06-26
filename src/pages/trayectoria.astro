@@ -1,0 +1,340 @@
+---
+import Base from '../layouts/Base.astro';
+
+const careerBlocks = [
+  {
+    period: "1999 · 2001",
+    title: "Revista Gourmand",
+    placeholderText: "Revista Gourmand 1999-2001"
+  },
+  {
+    period: "2002 · 2005",
+    title: "Viña Valdivieso",
+    placeholderText: "Viña Valdivieso 2002-2005"
+  },
+  {
+    period: "2007 · 2009",
+    title: "Cavas Reunidas / Guía Descorchados",
+    placeholderText: "Guía Descorchados 2007-2009"
+  },
+  {
+    period: "2009 · 2025",
+    title: "Descorchados PYR",
+    placeholderText: "Descorchados PYR 2009-2025"
+  },
+  {
+    period: "2014 · presente",
+    title: "Inversiones Comunicaciones del Vino SpA",
+    placeholderText: "Inversiones Comunicaciones del Vino 2014-presente"
+  }
+];
+
+const education = [
+  "Periodista — Universidad Gabriela Mistral (1993-1997)",
+  "Diplomado del Vino Chileno — Pontificia Universidad Católica de Chile (2014)",
+  "Wine Institute Mendoza (2016)",
+  "WSET Nivel 2 — Conservatorio del Vino (2018)",
+  "WSET Nivel 3 con mérito — Wine School (2022)",
+  "Diplomado Comunicación Estratégica 2.0 — Universidad del Desarrollo",
+  "Diplomado Estrategias de Marketing Digital — Universidad de los Andes (en curso)"
+];
+---
+
+<Base title="María Paz Jiménez — Trayectoria">
+  <div class="trayectoria-page">
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="container">
+        <h1 class="page-title">Trayectoria</h1>
+        <p class="page-subtitle">Pendiente — 1 línea, subtítulo de trayectoria. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+    </header>
+
+    <!-- Career Timeline Blocks -->
+    <section class="timeline-section">
+      <div class="container timeline-container">
+        {careerBlocks.map((block) => (
+          <div class="career-block">
+            <div class="block-image-container">
+              <!-- PLACEHOLDER: Imagen de {block.title} -->
+              <div class="block-image-placeholder">
+                <span class="placeholder-text">{block.placeholderText}</span>
+              </div>
+            </div>
+            <div class="block-content">
+              <span class="block-period">{block.period}</span>
+              <h3 class="block-title">{block.title}</h3>
+              <p class="block-desc">
+                Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education-section">
+      <div class="container education-container">
+        <div class="section-label">
+          <span class="label-text">Formación y certificaciones</span>
+          <span class="label-line"></span>
+        </div>
+        <ul class="education-list">
+          {education.map((item) => (
+            <li class="education-item">
+              <span class="education-bullet">•</span>
+              <span class="education-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="gallery-section">
+      <div class="container gallery-container">
+        <div class="section-label">
+          <span class="label-text">Registro visual</span>
+          <span class="label-line"></span>
+        </div>
+        <!-- PLACEHOLDER: Galería de imágenes - la cliente seleccionará las fotos -->
+        <div class="gallery-grid">
+          <div class="gallery-item-placeholder">
+            <span class="gallery-placeholder-text">Registro 1 (4:3)</span>
+          </div>
+          <div class="gallery-item-placeholder">
+            <span class="gallery-placeholder-text">Registro 2 (4:3)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* --- PAGE HEADER --- */
+  .page-header {
+    padding: 64px 0 32px 0;
+    text-align: center;
+    background-color: var(--bg);
+  }
+
+  .page-title {
+    font-size: var(--text-2xl); /* 42px on mobile */
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+
+  .page-subtitle {
+    font-size: var(--text-base);
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* --- TIMELINE BLOCKS --- */
+  .timeline-section {
+    padding: var(--section-padding-vertical-mobile) 0;
+    background-color: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .timeline-container {
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .career-block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .block-image-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .block-image-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease;
+  }
+
+  .career-block:hover .block-image-placeholder {
+    transform: scale(1.03);
+  }
+
+  .placeholder-text {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 0 16px;
+    text-align: center;
+  }
+
+  .block-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .block-period {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .block-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg); /* 20px on mobile */
+    color: var(--text);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+
+  .block-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* --- EDUCATION --- */
+  .education-section {
+    padding: var(--section-padding-vertical-mobile) 0;
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .education-container {
+    max-width: 900px;
+  }
+
+  .education-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .education-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .education-bullet {
+    color: var(--accent);
+    font-size: var(--text-lg);
+    line-height: 1;
+    margin-top: -2px;
+  }
+
+  /* --- GALLERY --- */
+  .gallery-section {
+    padding: var(--section-padding-vertical-mobile) 0;
+    background-color: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .gallery-container {
+    max-width: 900px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .gallery-item-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-placeholder-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* --- MEDIA QUERIES (768px and up) --- */
+  @media (min-width: 768px) {
+    .page-header {
+      padding: 80px 0 48px 0;
+    }
+
+    .page-title {
+      font-size: 52px;
+    }
+
+    .timeline-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+
+    .timeline-container {
+      gap: 64px;
+    }
+
+    .career-block {
+      flex-direction: row;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .career-block:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .block-image-container {
+      flex: 0.8; /* takes ~40% width */
+    }
+
+    .block-content {
+      flex: 1.2; /* takes ~60% width */
+    }
+
+    .block-title {
+      font-size: 24px;
+    }
+
+    .education-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+
+    .gallery-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+</style>

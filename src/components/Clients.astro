@@ -1,0 +1,118 @@
+---
+const clients = [
+  { name: 'Morandé' },
+  { name: 'Odfjell' },
+  { name: 'Valdivieso' },
+  { name: 'Santa Ema' },
+  { name: 'Piedra Sagrada' },
+  { name: 'Tres Palacios' },
+  { name: 'Descorchados' },
+  { name: 'Vinos de Chile' }
+];
+---
+<section class="clients-section">
+  <div class="container clients-container">
+    <div class="clients-header">
+      <span class="label-mono clients-label">Clientes</span>
+      <p class="clients-copy">Estas empresas han confiado en mi trabajo de comunicación estratégica y ferias.</p>
+    </div>
+    
+    <div class="logo-grid">
+      {clients.map(client => (
+        <div class="logo-item" title={client.name}>
+          <!-- PLACEHOLDER: Logo de {client.name} -->
+          <span class="logo-placeholder-text">{client.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .clients-section {
+    padding: var(--section-padding-vertical-mobile) 0;
+    background-color: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .clients-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .clients-label {
+    display: block;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .clients-copy {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    justify-items: center;
+  }
+
+  .logo-item {
+    width: 100%;
+    height: 64px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(100%);
+    opacity: 0.8;
+    transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    cursor: default;
+    padding: 0 16px;
+  }
+
+  .logo-item:hover {
+    filter: none;
+    opacity: 1;
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .logo-placeholder-text {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .logo-item:hover .logo-placeholder-text {
+    color: var(--accent);
+  }
+
+  /* Tablet layout (640px and up) */
+  @media (min-width: 640px) {
+    .logo-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Desktop layout (768px and up) */
+  @media (min-width: 768px) {
+    .clients-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+
+    .logo-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+  }
+</style>

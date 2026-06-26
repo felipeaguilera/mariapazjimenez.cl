@@ -1,0 +1,106 @@
+---
+---
+<section class="project-section">
+  <div class="container project-container">
+    <span class="label-mono project-label">Proyecto destacado</span>
+    <h2 class="project-title">Vinos con Maripepa</h2>
+    <!-- PLACEHOLDER: Descripción del podcast -->
+    <p class="project-description">
+      Un espacio semanal de conversación y educación sobre vino y enoturismo. 
+      Disponible en YouTube, Spotify y Apple Podcasts.
+    </p>
+    <div class="project-links">
+      <a href="https://www.youtube.com/@detripascorazonvinos" target="_blank" rel="noopener noreferrer" class="project-chip">
+        → YouTube
+      </a>
+      <!-- PLACEHOLDER: Enlace de Spotify pendiente -->
+      <a href="#" class="project-chip disabled" onclick="return false;" title="Enlace pendiente">
+        → Spotify
+      </a>
+      <a href="https://www.instagram.com/detripascorazonvino" target="_blank" rel="noopener noreferrer" class="project-chip">
+        → Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .project-section {
+    background-color: var(--surface);
+    padding: var(--section-padding-vertical-mobile) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-container {
+    max-width: 800px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .project-label {
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .project-title {
+    font-size: var(--text-xl); /* 28px on mobile */
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .project-description {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--text);
+    max-width: 600px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .project-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    background-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .project-chip:hover:not(.disabled) {
+    background-color: var(--accent);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .project-chip.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--muted);
+    color: var(--muted);
+  }
+
+  @media (min-width: 768px) {
+    .project-section {
+      padding: var(--section-padding-vertical-desktop) 0;
+    }
+
+    .project-title {
+      font-size: 38px;
+    }
+  }
+</style>
