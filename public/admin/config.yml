@@ -40,6 +40,11 @@ collections:
                 name: "desc"
                 widget: "text"
                 hint: "2–3 líneas describiendo este área."
+              - label: "Imagen"
+                name: "image"
+                widget: "image"
+                required: false
+                hint: "Foto representativa de esta área. Recomendado: 800x600 px o superior."
 
           - label: "Descripción del podcast"
             name: "podcast_desc"

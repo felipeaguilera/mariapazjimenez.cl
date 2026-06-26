@@ -46,7 +46,10 @@ import content from '../data/home.json';
         {content.work_cards.map((card) => (
           <div class="work-card">
             <div class="card-image-placeholder">
-              <span class="placeholder-text">{card.title}</span>
+              {card.image
+                ? <img src={card.image} alt={card.title} class="card-image" loading="lazy" />
+                : <span class="placeholder-text">{card.title}</span>
+              }
             </div>
             <h3 class="card-title">{card.title}</h3>
             <p class="card-desc">{card.desc}</p>
@@ -267,6 +270,18 @@ import content from '../data/home.json';
     justify-content: center;
     margin-bottom: 16px;
     overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  .work-card:hover .card-image {
+    transform: scale(1.04);
   }
 
   .placeholder-text {
