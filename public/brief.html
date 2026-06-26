@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto sitio web — María Paz Jiménez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:    #8B1A2F;
+      --accent-lt: #F7EDEF;
+      --bg:        #FAFAF7;
+      --surface:   #F2EEE8;
+      --text:      #1A1A1A;
+      --muted:     #6B6B6B;
+      --border:    #E4DED4;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav img { height: 36px; width: auto; }
+    .nav-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      padding: 4rem 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header .eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .page-header .subtitle {
+      font-size: 0.9375rem;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    /* ── PREVIEW LINK ── */
+    .preview-bar {
+      background: var(--accent-lt);
+      border: 1px solid #D9B0BA;
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      margin: 2rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .preview-bar p {
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+    .preview-bar p span { color: var(--muted); font-size: 0.8125rem; display: block; }
+    .preview-bar a {
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      padding: 0.5rem 1.1rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .preview-bar a:hover { opacity: 0.88; }
+
+    /* ── SECTIONS ── */
+    .section { padding: 2.5rem 0; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.375rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-green  { background: #2D7A4F; }
+    .dot-amber  { background: #B46A00; }
+    .dot-gray   { background: var(--border); border: 1px solid var(--muted); }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .check-done  { background: #E6F4ED; color: #2D7A4F; }
+    .check-pend  { background: #FEF3E2; color: #B46A00; }
+    .check-later { background: var(--surface); color: var(--muted); }
+
+    .checklist li .item-text { flex: 1; }
+    .checklist li .item-text .note {
+      display: block;
+      font-size: 0.8125rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ── NUMBERED LIST ── */
+    .step-list { list-style: none; counter-reset: steps; display: flex; flex-direction: column; gap: 1rem; }
+    .step-list li {
+      counter-increment: steps;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+    }
+    .step-list li::before {
+      content: counter(steps);
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-list li .note {
+      display: block;
+      font-size: 0.8125rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; gap: 1rem; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1rem;
+      font-size: 0.875rem;
+      align-items: start;
+    }
+    .timeline-item .phase {
+      font-weight: 500;
+      color: var(--accent);
+      font-size: 0.8125rem;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    .page-footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .nav { padding: 1rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.25rem; }
+      .preview-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <img src="/assets/Logo-maria-paz-morado.png" alt="María Paz Jiménez">
+    <span class="nav-label">Estado del proyecto</span>
+  </nav>
+
+  <main>
+    <div class="container">
+
+      <!-- HEADER -->
+      <header class="page-header">
+        <p class="eyebrow">Sitio personal · mariapazjimenez.cl</p>
+        <h1>Así va tu sitio web</h1>
+        <p class="subtitle">Un resumen de lo que está listo, lo que necesito de ti, y los siguientes pasos para llegar al dominio final.</p>
+      </header>
+
+      <!-- PREVIEW LINK -->
+      <div class="preview-bar">
+        <p>
+          Vista previa del sitio
+          <span>URL temporal mientras migra el dominio</span>
+        </p>
+        <a href="https://mariapazjimenezcl.netlify.app/" target="_blank">Ver el sitio</a>
+      </div>
+
+      <!-- SECCIÓN 1: LO QUE ESTÁ LISTO -->
+      <section class="section">
+        <h2 class="section-title">
+          <span class="dot dot-green"></span>
+          Lo que está listo
+        </h2>
+        <ul class="checklist">
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Estructura completa del sitio — 2 páginas: Inicio y Trayectoria
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Diseño: colores, tipografías y layout aprobados
+              <span class="note">Referencia principal: katherinecole.com</span>
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Todas las secciones construidas: Hero, cita destacada, Mi trabajo, Clientes, Podcast, Contacto
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Foto de portada y logo integrados
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Links del podcast conectados: YouTube, Spotify, Apple Podcasts
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              CMS activo en <strong>mariapazjimenezcl.netlify.app/admin/</strong>
+              <span class="note">Puedes editar las 4 áreas de trabajo (Mi trabajo) directamente desde ahí.</span>
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Deploy automático desde GitHub — cualquier cambio se publica en minutos
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- SECCIÓN 2: LO QUE NECESITO DE TI -->
+      <section class="section">
+        <h2 class="section-title">
+          <span class="dot dot-amber"></span>
+          Lo que necesito de ti
+        </h2>
+        <p style="margin-bottom: 1.25rem; font-size: 0.9rem; color: var(--muted);">Todo el copy del sitio te pertenece. Te envié una hoja de contenidos (<em>MPJ-Contenidos-v1.html</em>) con los campos exactos que necesito que rellenes. Cuando los tenga, los pegamos en el código y revisamos juntos.</p>
+        <ol class="step-list">
+          <li>
+            <span class="item-text">
+              <strong>Textos del inicio:</strong> bio hero (2–3 líneas), cita personal, descripción de tus 4 áreas de trabajo, descripción del podcast, texto de contacto
+            </span>
+          </li>
+          <li>
+            <span class="item-text">
+              <strong>Textos de trayectoria:</strong> bloques de carrera con fechas, roles y descripción breve
+            </span>
+          </li>
+          <li>
+            <span class="item-text">
+              <strong>Foto profesional</strong> (opcional)
+              <span class="note">La que tienes ahora funciona bien. Si tienes una versión de mayor resolución o quieres usar otra, me la mandas y la cambio.</span>
+            </span>
+          </li>
+        </ol>
+      </section>
+
+      <!-- SECCIÓN 3: SIGUIENTES PASOS -->
+      <section class="section">
+        <h2 class="section-title">
+          <span class="dot dot-gray"></span>
+          Siguientes pasos
+        </h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="phase">Ahora</span>
+            <span>Revisas el preview y me dices qué cambiar en diseño o estructura</span>
+          </div>
+          <div class="timeline-item">
+            <span class="phase">Tú me envías</span>
+            <span>Los textos via la hoja de contenidos</span>
+          </div>
+          <div class="timeline-item">
+            <span class="phase">Yo integro</span>
+            <span>Pego el contenido, ajustes finales de diseño — 1 a 2 días</span>
+          </div>
+          <div class="timeline-item">
+            <span class="phase">Revisión final</span>
+            <span>Tú apruebas o pides ajustes</span>
+          </div>
+          <div class="timeline-item">
+            <span class="phase">Dominio</span>
+            <span>Migramos mariapazjimenez.cl a Netlify — el sitio queda en el dominio definitivo</span>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    Proyecto desarrollado por <a href="https://evo.cl" target="_blank">EVO Communication Lab</a> para María Paz Jiménez · 2026
+  </footer>
+
+</body>
+</html>
