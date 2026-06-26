@@ -1,33 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-
-const careerBlocks = [
-  {
-    period: "1999 · 2001",
-    title: "Revista Gourmand",
-    placeholderText: "Revista Gourmand 1999-2001"
-  },
-  {
-    period: "2002 · 2005",
-    title: "Viña Valdivieso",
-    placeholderText: "Viña Valdivieso 2002-2005"
-  },
-  {
-    period: "2007 · 2009",
-    title: "Cavas Reunidas / Guía Descorchados",
-    placeholderText: "Guía Descorchados 2007-2009"
-  },
-  {
-    period: "2009 · 2025",
-    title: "Descorchados PYR",
-    placeholderText: "Descorchados PYR 2009-2025"
-  },
-  {
-    period: "2014 · presente",
-    title: "Inversiones Comunicaciones del Vino SpA",
-    placeholderText: "Inversiones Comunicaciones del Vino 2014-presente"
-  }
-];
+import trayectoria from '../data/trayectoria.json';
 
 const education = [
   "Periodista — Universidad Gabriela Mistral (1993-1997)",
@@ -46,27 +19,24 @@ const education = [
     <header class="page-header">
       <div class="container">
         <h1 class="page-title">Trayectoria</h1>
-        <p class="page-subtitle">Pendiente — 1 línea, subtítulo de trayectoria. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p class="page-subtitle">{trayectoria.subtitle}</p>
       </div>
     </header>
 
     <!-- Career Timeline Blocks -->
     <section class="timeline-section">
       <div class="container timeline-container">
-        {careerBlocks.map((block) => (
+        {trayectoria.career.map((block) => (
           <div class="career-block">
             <div class="block-image-container">
-              <!-- PLACEHOLDER: Imagen de {block.title} -->
               <div class="block-image-placeholder">
-                <span class="placeholder-text">{block.placeholderText}</span>
+                <span class="placeholder-text">{block.title}</span>
               </div>
             </div>
             <div class="block-content">
               <span class="block-period">{block.period}</span>
               <h3 class="block-title">{block.title}</h3>
-              <p class="block-desc">
-                Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-              </p>
+              <p class="block-desc">{block.desc}</p>
             </div>
           </div>
         ))}

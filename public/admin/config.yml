@@ -1,0 +1,76 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/assets
+public_folder: /assets
+
+locale: es
+
+collections:
+  - name: "home"
+    label: "Página de inicio"
+    files:
+      - label: "Contenido del inicio"
+        name: "home"
+        file: "src/data/home.json"
+        fields:
+          - label: "Introducción (hero)"
+            name: "hero_intro"
+            widget: "text"
+            hint: "Tu presentación breve. 2–3 líneas, primera persona."
+
+          - label: "Cita destacada"
+            name: "pull_quote"
+            widget: "text"
+            hint: "Una frase tuya. Aparece centrada con tipografía grande. 1–2 líneas."
+
+          - label: "Título de la sección Mi trabajo"
+            name: "work_title"
+            widget: "string"
+            hint: "Ej: Comunicación, eventos y contenidos"
+
+          - label: "Áreas de trabajo"
+            name: "work_cards"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - label: "Descripción"
+                name: "desc"
+                widget: "text"
+                hint: "2–3 líneas describiendo este área."
+
+          - label: "Descripción del podcast"
+            name: "podcast_desc"
+            widget: "text"
+            hint: "2–3 líneas sobre el podcast Vinos con Maripepa."
+
+          - label: "Texto de contacto"
+            name: "contact_desc"
+            widget: "text"
+            hint: "1–2 líneas de invitación a contactar."
+
+  - name: "trayectoria"
+    label: "Trayectoria"
+    files:
+      - label: "Contenido de trayectoria"
+        name: "trayectoria"
+        file: "src/data/trayectoria.json"
+        fields:
+          - label: "Subtítulo de la página"
+            name: "subtitle"
+            widget: "string"
+            hint: "Una línea que resume tu carrera."
+
+          - label: "Bloques de carrera"
+            name: "career"
+            widget: "list"
+            summary: "{{fields.period}} — {{fields.title}}"
+            fields:
+              - { label: "Período", name: "period", widget: "string", hint: "Ej: 1999 · 2001" }
+              - { label: "Empresa / Proyecto", name: "title", widget: "string" }
+              - label: "Descripción"
+                name: "desc"
+                widget: "text"
+                hint: "2–3 líneas sobre tu rol y lo que hiciste."

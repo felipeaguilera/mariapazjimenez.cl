@@ -1,0 +1,30 @@
+{
+  "subtitle": "Pendiente — 1 línea, subtítulo de trayectoria. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "career": [
+    {
+      "period": "1999 · 2001",
+      "title": "Revista Gourmand",
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+    },
+    {
+      "period": "2002 · 2005",
+      "title": "Viña Valdivieso",
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+    },
+    {
+      "period": "2007 · 2009",
+      "title": "Cavas Reunidas / Guía Descorchados",
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+    },
+    {
+      "period": "2009 · 2025",
+      "title": "Descorchados PYR",
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+    },
+    {
+      "period": "2014 · presente",
+      "title": "Inversiones Comunicaciones del Vino SpA",
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+    }
+  ]
+}

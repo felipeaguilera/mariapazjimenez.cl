@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import content from '../data/home.json';
 ---
 
 <Base title="María Paz Jiménez — Periodista y comunicadora de vinos">
@@ -12,9 +13,7 @@ import Base from '../layouts/Base.astro';
           <span class="label-line"></span>
         </div>
         <h1 class="hero-title">María Paz Jiménez</h1>
-        <p class="hero-intro">
-          Pendiente — 2–3 líneas, primera persona. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
-        </p>
+        <p class="hero-intro">{content.hero_intro}</p>
         <div class="hero-links">
           <a href="#contacto" class="btn-outline">Contactar</a>
           <a href="/trayectoria" class="btn-outline">Ver trayectoria</a>
@@ -29,9 +28,7 @@ import Base from '../layouts/Base.astro';
   <!-- 2. PULL QUOTE SECTION -->
   <section class="quote-section">
     <div class="container quote-container">
-      <blockquote class="pull-quote">
-        «Pendiente — cita en primera persona, 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.»
-      </blockquote>
+      <blockquote class="pull-quote">«{content.pull_quote}»</blockquote>
       <cite class="quote-author">María Paz Jiménez</cite>
     </div>
   </section>
@@ -43,44 +40,18 @@ import Base from '../layouts/Base.astro';
         <span class="label-text">Mi trabajo</span>
         <span class="label-line"></span>
       </div>
-      <h2 class="section-title" style="text-align:center;">Comunicación, eventos y contenidos</h2>
+      <h2 class="section-title" style="text-align:center;">{content.work_title}</h2>
 
       <div class="work-grid">
-        <!-- Card 1 -->
-        <div class="work-card">
-          <div class="card-image-placeholder">
-            <span class="placeholder-text">Comunicaciones y PR</span>
+        {content.work_cards.map((card) => (
+          <div class="work-card">
+            <div class="card-image-placeholder">
+              <span class="placeholder-text">{card.title}</span>
+            </div>
+            <h3 class="card-title">{card.title}</h3>
+            <p class="card-desc">{card.desc}</p>
           </div>
-          <h3 class="card-title">Comunicaciones y PR</h3>
-          <p class="card-desc">Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="work-card">
-          <div class="card-image-placeholder">
-            <span class="placeholder-text">Eventos</span>
-          </div>
-          <h3 class="card-title">Eventos</h3>
-          <p class="card-desc">Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="work-card">
-          <div class="card-image-placeholder">
-            <span class="placeholder-text">Podcast y Charlas</span>
-          </div>
-          <h3 class="card-title">Podcast y Charlas</h3>
-          <p class="card-desc">Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="work-card">
-          <div class="card-image-placeholder">
-            <span class="placeholder-text">Turismo</span>
-          </div>
-          <h3 class="card-title">Turismo</h3>
-          <p class="card-desc">Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-        </div>
+        ))}
       </div>
     </div>
   </section>
@@ -108,7 +79,7 @@ import Base from '../layouts/Base.astro';
           <span class="label-line"></span>
         </div>
         <h2 class="podcast-title">Podcast Vinos con Maripepa</h2>
-        <p class="podcast-desc">Pendiente — 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p class="podcast-desc">{content.podcast_desc}</p>
         <div class="podcast-chips">
           <a href="https://www.youtube.com/@detripascorazonvinos" target="_blank" rel="noopener noreferrer" class="btn-outline">
             <img src="/assets/icons/youtube-logo.svg" width="18" height="18" class="podcast-btn-icon" alt="" />
@@ -138,7 +109,7 @@ import Base from '../layouts/Base.astro';
         <span class="label-line"></span>
       </div>
       <h2 class="contact-title">Hablemos</h2>
-      <p class="contact-desc">Pendiente. 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit et dolore magna.</p>
+      <p class="contact-desc">{content.contact_desc}</p>
       <div class="contact-buttons">
         <a href="https://wa.me/56998882760" target="_blank" rel="noopener noreferrer" class="btn-outline">
           <img src="/assets/icons/whatsapp-logo.svg" width="20" height="20" class="contact-icon" alt="" />
