@@ -5,7 +5,8 @@
     <div class="footer-top">
       <div class="footer-left">
         <a href="/" class="footer-logo-link">
-          <img src="/assets/Logo-maria-paz-morado.png" alt="María Paz Jiménez" class="footer-logo-img" />
+          <span class="footer-logo-name">María Paz Jiménez</span>
+          <span class="footer-logo-handle">@mariapazjimenezvino</span>
         </a>
       </div>
       <div class="footer-right">
@@ -56,12 +57,27 @@
 
   .footer-logo-link {
     display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    text-decoration: none;
   }
 
-  .footer-logo-img {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
+  .footer-logo-name {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .footer-logo-handle {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 9.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
   }
 
   .footer-right {

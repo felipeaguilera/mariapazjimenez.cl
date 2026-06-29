@@ -3,7 +3,8 @@
 <header class="header">
   <div class="container nav-container">
     <a href="/" class="logo-link">
-      <img src="/assets/Logo-maria-paz-morado.png" alt="María Paz Jiménez" class="logo-img" height="36" />
+      <span class="logo-name">María Paz Jiménez</span>
+      <span class="logo-handle">@mariapazjimenezvino</span>
     </a>
     
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
@@ -13,7 +14,7 @@
     </button>
 
     <nav class="nav-links" id="nav-links">
-      <a href="/#mi-trabajo" class="nav-link">Mi Trabajo</a>
+      <a href="/#que-hago" class="nav-link">Trabaja conmigo</a>
       <a href="/trayectoria" class="nav-link">Trayectoria</a>
       <a href="/#podcast" class="nav-link">Podcast</a>
       <a href="/#contacto" class="nav-link">Contacto</a>
@@ -66,13 +67,28 @@
 
   .logo-link {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+    text-decoration: none;
+    gap: 3px;
   }
 
-  .logo-img {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
+  .logo-name {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .logo-handle {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 9.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
   }
 
   .nav-links {
