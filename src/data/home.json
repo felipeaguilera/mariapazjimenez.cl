@@ -1,29 +1,24 @@
 {
   "hero_intro": "Pendiente: 2–3 líneas, primera persona. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
-  "pull_quote": "Pendiente — cita en primera persona, 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
-  "work_title": "Comunicación, eventos y contenidos",
+  "pull_quote": "Pendiente: cita en primera persona, 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+  "work_title": "Trabaja con María Paz Jiménez",
   "work_cards": [
     {
-      "title": "Comunicaciones y PR",
+      "title": "Comunicación & Eventos",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "image": ""
     },
     {
-      "title": "Eventos",
+      "title": "Catas & Maridajes",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "image": ""
     },
     {
-      "title": "Podcast y Charlas",
+      "title": "Podcast Vinos con Marypepa",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "image": "/assets/img-20250611-wa0031.jpg"
-    },
-    {
-      "title": "Turismo",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
-      "image": ""
     }
   ],
-  "podcast_desc": "Pendiente — 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "podcast_desc": "Pendiente: 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "contact_desc": "Pendiente. 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit et dolore magna."
 }
