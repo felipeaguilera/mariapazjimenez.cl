@@ -15,6 +15,11 @@ collections:
         name: "home"
         file: "src/data/home.json"
         fields:
+          - label: "Texto Quién soy"
+            name: "about_text"
+            widget: "text"
+            hint: "3–5 líneas. Aparece en la sección 'Quién soy' justo después del hero. Puedes escribirlo en primera o tercera persona."
+
           - label: "Introducción (hero)"
             name: "hero_intro"
             widget: "text"
@@ -23,12 +28,12 @@ collections:
           - label: "Cita destacada"
             name: "pull_quote"
             widget: "text"
-            hint: "Una frase tuya. Aparece centrada con tipografía grande. 1–2 líneas."
+            hint: "Una frase tuya. 1–2 líneas."
 
-          - label: "Título de la sección Mi trabajo"
+          - label: "Título de la sección Trabaja conmigo"
             name: "work_title"
             widget: "string"
-            hint: "Ej: Comunicación, eventos y contenidos"
+            hint: "Ej: Trabaja con María Paz Jiménez"
 
           - label: "Áreas de trabajo"
             name: "work_cards"
@@ -40,16 +45,19 @@ collections:
                 name: "desc"
                 widget: "text"
                 hint: "2–3 líneas describiendo este área."
-              - label: "Imagen"
-                name: "image"
-                widget: "image"
-                required: false
-                hint: "Foto representativa de esta área. Recomendado: 800x600 px o superior."
+              - label: "Fotos del área"
+                name: "images"
+                widget: "list"
+                hint: "Sube entre 3 y 5 fotos. Se muestran como slideshow automático. Recomendado: 1200x800 px, formato JPG/WebP."
+                field:
+                  label: "Foto"
+                  name: "image"
+                  widget: "image"
 
           - label: "Descripción del podcast"
             name: "podcast_desc"
             widget: "text"
-            hint: "2–3 líneas sobre el podcast Vinos con Maripepa."
+            hint: "2–3 líneas sobre el podcast Vinos con Marypepa."
 
           - label: "Texto de contacto"
             name: "contact_desc"
@@ -75,7 +83,20 @@ collections:
             fields:
               - { label: "Período", name: "period", widget: "string", hint: "Ej: 1999 · 2001" }
               - { label: "Empresa / Proyecto", name: "title", widget: "string" }
-              - label: "Descripción"
+              - label: "Descripción corta"
                 name: "desc"
                 widget: "text"
-                hint: "2–3 líneas sobre tu rol y lo que hiciste."
+                hint: "2–3 líneas de resumen. Siempre visible."
+              - label: "Texto extendido (opcional)"
+                name: "extended_text"
+                widget: "text"
+                required: false
+                hint: "Si tienes un texto más largo (artículo, crónica), pégalo aquí. Aparece con botón 'Leer más'."
+              - label: "Fotos"
+                name: "images"
+                widget: "list"
+                hint: "Sube entre 2 y 4 fotos de esta etapa. Se muestran como slideshow automático. Recomendado: 1200x800 px."
+                field:
+                  label: "Foto"
+                  name: "image"
+                  widget: "image"

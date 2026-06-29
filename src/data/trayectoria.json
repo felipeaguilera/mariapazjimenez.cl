@@ -4,22 +4,44 @@
     {
       "period": "2007 · presente",
       "title": "Inversiones Comunicaciones del Vino SpA",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+      "extended_text": "",
+      "images": [
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicaciones+del+Vino+1",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicaciones+del+Vino+2",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicaciones+del+Vino+3"
+      ]
     },
     {
       "period": "2009 · 2026",
       "title": "Descorchados",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+      "extended_text": "",
+      "images": [
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Descorchados+1",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Descorchados+2",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Descorchados+3"
+      ]
     },
     {
       "period": "2002 · 2006",
       "title": "Viña Valdivieso",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+      "extended_text": "",
+      "images": [
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Viña+Valdivieso+1",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Viña+Valdivieso+2"
+      ]
     },
     {
       "period": "1999 · 2002",
       "title": "Revista Gourmand",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+      "desc": "Pendiente. 2–3 líneas de resumen. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "extended_text": "Pendiente: texto completo del apartado original de la web anterior. Puede ser extenso — se mostrará con botón 'Leer más'.",
+      "images": [
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Revista+Gourmand+1",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Revista+Gourmand+2"
+      ]
     }
   ]
 }

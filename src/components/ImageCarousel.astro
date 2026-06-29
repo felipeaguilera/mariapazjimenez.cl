@@ -1,0 +1,202 @@
+---
+interface Props {
+  images: string[];
+  alt?: string;
+  autoplay?: boolean;
+  interval?: number;
+}
+
+const {
+  images = [],
+  alt = "",
+  autoplay = true,
+  interval = 4000,
+} = Astro.props;
+
+// Generate a unique ID so multiple carousels on the same page don't collide
+const uid = `c${Math.random().toString(36).slice(2, 8)}`;
+---
+
+{images.length > 0 && (
+  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval}>
+    <div class="carousel-track-wrap">
+      <ul class="carousel-track">
+        {images.map((src, i) => (
+          <li class="carousel-slide" aria-hidden={i !== 0 ? "true" : "false"}>
+            <img src={src} alt={`${alt} ${i + 1}`} loading={i === 0 ? "eager" : "lazy"} draggable="false" />
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {images.length > 1 && (
+      <>
+        <button class="carousel-btn carousel-prev" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="carousel-btn carousel-next" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots">
+          {images.map((_, i) => (
+            <button class={`carousel-dot${i === 0 ? " active" : ""}`} aria-label={`Imagen ${i + 1}`} data-index={i}></button>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+)}
+
+<style>
+  .carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: var(--surface);
+    aspect-ratio: 3 / 2;
+  }
+
+  .carousel-track-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    height: 100%;
+    list-style: none;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+  }
+
+  /* Prev / Next buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+    padding: 0;
+  }
+
+  .carousel:hover .carousel-btn {
+    opacity: 1;
+  }
+
+  .carousel-prev { left: 10px; }
+  .carousel-next { right: 10px; }
+
+  .carousel-btn:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+
+  /* Dots */
+  .carousel-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+  }
+
+  .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .carousel-dot.active {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.3);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.carousel').forEach((el) => {
+    const track = el.querySelector<HTMLElement>('.carousel-track')!;
+    const slides = el.querySelectorAll<HTMLElement>('.carousel-slide');
+    const dots = el.querySelectorAll<HTMLButtonElement>('.carousel-dot');
+    const prevBtn = el.querySelector<HTMLButtonElement>('.carousel-prev');
+    const nextBtn = el.querySelector<HTMLButtonElement>('.carousel-next');
+    const total = slides.length;
+    const autoplay = el.dataset.autoplay === 'true';
+    const interval = parseInt(el.dataset.interval || '4000', 10);
+
+    if (total <= 1) return;
+
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function goTo(idx: number) {
+      slides[current].setAttribute('aria-hidden', 'true');
+      dots[current]?.classList.remove('active');
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      slides[current].setAttribute('aria-hidden', 'false');
+      dots[current]?.classList.add('active');
+    }
+
+    function startTimer() {
+      if (!autoplay) return;
+      timer = setInterval(() => goTo(current + 1), interval);
+    }
+
+    function stopTimer() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    prevBtn?.addEventListener('click', () => { stopTimer(); goTo(current - 1); startTimer(); });
+    nextBtn?.addEventListener('click', () => { stopTimer(); goTo(current + 1); startTimer(); });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); });
+    });
+
+    // Pause on hover
+    el.addEventListener('mouseenter', stopTimer);
+    el.addEventListener('mouseleave', startTimer);
+
+    // Touch swipe
+    let touchStartX = 0;
+    el.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) { stopTimer(); goTo(current + (diff > 0 ? 1 : -1)); startTimer(); }
+    }, { passive: true });
+
+    startTimer();
+  });
+</script>

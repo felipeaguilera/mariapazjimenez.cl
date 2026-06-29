@@ -1,4 +1,5 @@
 {
+  "about_text": "Pendiente: 3–5 líneas, primera o tercera persona (pendiente decisión). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
   "hero_intro": "Pendiente: 2–3 líneas, primera persona. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
   "pull_quote": "Pendiente: cita en primera persona, 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
   "work_title": "Trabaja con María Paz Jiménez",
@@ -6,17 +7,31 @@
     {
       "title": "Comunicación & Eventos",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
-      "image": ""
+      "images": [
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+1",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+2",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+3",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+4"
+      ]
     },
     {
       "title": "Catas & Maridajes",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
-      "image": ""
+      "images": [
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+1",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+2",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+3",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+4"
+      ]
     },
     {
       "title": "Podcast Vinos con Marypepa",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
-      "image": "/assets/img-20250611-wa0031.jpg"
+      "images": [
+        "/assets/img-20250611-wa0031.jpg",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Podcast+Vinos+con+Marypepa+2",
+        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Podcast+Vinos+con+Marypepa+3"
+      ]
     }
   ],
   "podcast_desc": "Pendiente: 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

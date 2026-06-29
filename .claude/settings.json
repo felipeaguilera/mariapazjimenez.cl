@@ -1,7 +1,22 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(npm run *)",
+      "PowerShell(npm run dev)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue | Select-Object Source; Get-Command npm -ErrorAction SilentlyContinue | Select-Object Source; $env:PATH -split ';' | Where-Object { $_ -match 'node|nvm|npm' })",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"$env:APPDATA\\\\nvm\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"$env:LOCALAPPDATA\\\\fnm\" -ErrorAction SilentlyContinue | Select-Object Name)",
+      "Read(//c/Users/felip/AppData/Roaming/**)",
+      "Read(//c/Users/felip/**)",
+      "PowerShell($env:PATH -split ';' | ForEach-Object { $_ })",
+      "PowerShell(reg query \"HKCU\\\\Environment\" /v Path 2>$null)",
+      "PowerShell(reg query \"HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\" /v Path 2>$null)",
+      "PowerShell($machinePath = [System.Environment]::GetEnvironmentVariable\\(\"Path\", \"Machine\"\\); $userPath = [System.Environment]::GetEnvironmentVariable\\(\"Path\", \"User\"\\); $env:PATH = \"$machinePath;$userPath\"; node --version && npm --version)",
+      "PowerShell($machinePath = [System.Environment]::GetEnvironmentVariable\\(\"Path\", \"Machine\"\\); $userPath = [System.Environment]::GetEnvironmentVariable\\(\"Path\", \"User\"\\); $env:PATH = \"$machinePath;$userPath\"; npm install)",
+      "PowerShell($machinePath = [System.Environment]::GetEnvironmentVariable\\(\"Path\", \"Machine\"\\); $userPath = [System.Environment]::GetEnvironmentVariable\\(\"Path\", \"User\"\\); $env:PATH = \"$machinePath;$userPath\"; npm run dev)",
+      "PowerShell(Start-Process \"http://localhost:4321/\")"
     ]
   }
 }
