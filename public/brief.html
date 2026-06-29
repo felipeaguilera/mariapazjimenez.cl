@@ -28,7 +28,7 @@
       line-height: 1.65;
     }
 
-    /* ── NAV ── */
+    /* NAV */
     .nav {
       border-bottom: 1px solid var(--border);
       padding: 1.25rem 2rem;
@@ -46,14 +46,14 @@
       color: var(--muted);
     }
 
-    /* ── LAYOUT ── */
+    /* LAYOUT */
     .container {
       max-width: 740px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
 
-    /* ── HEADER ── */
+    /* HEADER */
     .page-header {
       padding: 4rem 0 2.5rem;
       border-bottom: 1px solid var(--border);
@@ -79,7 +79,7 @@
       max-width: 520px;
     }
 
-    /* ── PREVIEW LINK ── */
+    /* PREVIEW LINK */
     .preview-bar {
       background: var(--accent-lt);
       border: 1px solid #D9B0BA;
@@ -110,7 +110,7 @@
     }
     .preview-bar a:hover { opacity: 0.88; }
 
-    /* ── SECTIONS ── */
+    /* SECTIONS */
     .section { padding: 2.5rem 0; border-bottom: 1px solid var(--border); }
     .section:last-child { border-bottom: none; }
 
@@ -133,7 +133,7 @@
     .dot-amber  { background: #B46A00; }
     .dot-gray   { background: var(--border); border: 1px solid var(--muted); }
 
-    /* ── CHECKLIST ── */
+    /* CHECKLIST */
     .checklist { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
     .checklist li {
       display: flex;
@@ -165,7 +165,7 @@
       margin-top: 0.15rem;
     }
 
-    /* ── NUMBERED LIST ── */
+    /* NUMBERED LIST */
     .step-list { list-style: none; counter-reset: steps; display: flex; flex-direction: column; gap: 1rem; }
     .step-list li {
       counter-increment: steps;
@@ -196,11 +196,11 @@
       margin-top: 0.15rem;
     }
 
-    /* ── TIMELINE ── */
+    /* TIMELINE */
     .timeline { display: flex; flex-direction: column; gap: 1rem; }
     .timeline-item {
       display: grid;
-      grid-template-columns: 120px 1fr;
+      grid-template-columns: 130px 1fr;
       gap: 1rem;
       font-size: 0.875rem;
       align-items: start;
@@ -211,7 +211,7 @@
       font-size: 0.8125rem;
     }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     .page-footer {
       background: var(--surface);
       border-top: 1px solid var(--border);
@@ -221,6 +221,21 @@
       color: var(--muted);
     }
     .page-footer a { color: var(--accent); text-decoration: none; }
+
+    /* UPDATE BADGE */
+    .update-badge {
+      display: inline-block;
+      background: #E6F4ED;
+      color: #2D7A4F;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
 
     @media (max-width: 600px) {
       .nav { padding: 1rem; }
@@ -233,7 +248,7 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <img src="/assets/Logo-maria-paz-morado.png" alt="María Paz Jiménez">
+    <a href="/"><img src="/assets/Logo-maria-paz-morado.png" alt="María Paz Jiménez"></a>
     <span class="nav-label">Estado del proyecto</span>
   </nav>
 
@@ -244,14 +259,14 @@
       <header class="page-header">
         <p class="eyebrow">Sitio personal · mariapazjimenez.cl</p>
         <h1>Así va tu sitio web</h1>
-        <p class="subtitle">Un resumen de lo que está listo, lo que necesito de ti, y los siguientes pasos para llegar al dominio final.</p>
+        <p class="subtitle">Un resumen de lo que está listo, lo que necesito de ti, y los pasos que siguen. Actualizado el 29 de junio de 2026.</p>
       </header>
 
       <!-- PREVIEW LINK -->
       <div class="preview-bar">
         <p>
           Vista previa del sitio
-          <span>URL temporal mientras migra el dominio</span>
+          <span>URL temporal mientras migramos el dominio</span>
         </p>
         <a href="https://mariapazjimenezcl.netlify.app/" target="_blank">Ver el sitio</a>
       </div>
@@ -266,26 +281,13 @@
           <li>
             <span class="check-icon check-done">✓</span>
             <span class="item-text">
-              Estructura completa del sitio — 2 páginas: Inicio y Trayectoria
+              Estructura completa: 2 páginas (Inicio y Trayectoria), diseño y tipografías aprobados
             </span>
           </li>
           <li>
             <span class="check-icon check-done">✓</span>
             <span class="item-text">
-              Diseño: colores, tipografías y layout aprobados
-              <span class="note">Referencia principal: katherinecole.com</span>
-            </span>
-          </li>
-          <li>
-            <span class="check-icon check-done">✓</span>
-            <span class="item-text">
-              Todas las secciones construidas: Hero, cita destacada, Mi trabajo, Clientes, Podcast, Contacto
-            </span>
-          </li>
-          <li>
-            <span class="check-icon check-done">✓</span>
-            <span class="item-text">
-              Foto de portada y logo integrados
+              Foto de portada, logo y logos de clientes integrados
             </span>
           </li>
           <li>
@@ -297,14 +299,34 @@
           <li>
             <span class="check-icon check-done">✓</span>
             <span class="item-text">
-              CMS activo en <strong>mariapazjimenezcl.netlify.app/admin/</strong>
-              <span class="note">Puedes editar las 4 áreas de trabajo (Mi trabajo) directamente desde ahí.</span>
+              Sección "Trabaja conmigo" con 3 áreas: Comunicación &amp; Eventos, Catas &amp; Maridajes, Podcast Vinos con Marypepa
+              <span class="note">Actualizado según tu feedback. Antes eran 4 áreas con otro nombre.</span>
             </span>
           </li>
           <li>
             <span class="check-icon check-done">✓</span>
             <span class="item-text">
-              Deploy automático desde GitHub — cualquier cambio se publica en minutos
+              Trayectoria reordenada: Inversiones (2007) · Descorchados (2009) · Valdivieso (2002) · Gourmand (1999)
+              <span class="note">Formación también actualizada con año 2009 del Diplomado UDD y orden corregido.</span>
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Tagline actualizado: "Periodista · Eventos · Podcast Vinos con Marypepa"
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              CMS activo en <strong>/admin/</strong> — puedes editar textos e imágenes directamente desde el navegador
+              <span class="note">Ya probado con éxito: los cambios se publican en 1–2 minutos.</span>
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-done">✓</span>
+            <span class="item-text">
+              Deploy automático desde GitHub: cualquier cambio se publica en minutos
             </span>
           </li>
         </ul>
@@ -316,45 +338,88 @@
           <span class="dot dot-amber"></span>
           Lo que necesito de ti
         </h2>
-        <p style="margin-bottom: 1.25rem; font-size: 0.9rem; color: var(--muted);">Todo el copy del sitio te pertenece. Te envié una hoja de contenidos (<em>MPJ-Contenidos-v1.html</em>) con los campos exactos que necesito que rellenes. Cuando los tenga, los pegamos en el código y revisamos juntos.</p>
+        <p style="margin-bottom: 1.25rem; font-size: 0.9rem; color: var(--muted);">Tengo estructura, tengo diseño, tengo CMS. Lo que falta es tu contenido. Aquí la lista exacta:</p>
         <ol class="step-list">
           <li>
             <span class="item-text">
-              <strong>Textos del inicio:</strong> bio hero (2–3 líneas), cita personal, descripción de tus 4 áreas de trabajo, descripción del podcast, texto de contacto
+              <strong>Foto principal:</strong> mencionaste que querías explorar otras opciones. Me mandas las que quieras evaluar y elegimos juntos.
+              <span class="note">Si quieres usar la de tu sitio anterior, puedo rescatarla si me das acceso o me la mandas directamente.</span>
             </span>
           </li>
           <li>
             <span class="item-text">
-              <strong>Textos de trayectoria:</strong> bloques de carrera con fechas, roles y descripción breve
+              <strong>Decisión de voz:</strong> primera persona (como Paz Levinson) o tercera persona (como Amanda Barnes). Tú decides cómo quieres presentarte.
+              <span class="note">Una vez que decidas, yo puedo ayudarte a estructurar el texto si lo necesitas.</span>
             </span>
           </li>
           <li>
             <span class="item-text">
-              <strong>Foto profesional</strong> (opcional)
-              <span class="note">La que tienes ahora funciona bien. Si tienes una versión de mayor resolución o quieres usar otra, me la mandas y la cambio.</span>
+              <strong>Textos del inicio:</strong> bio (2–3 líneas), cita personal, descripción de las 3 áreas de trabajo, texto del podcast, texto de contacto
+            </span>
+          </li>
+          <li>
+            <span class="item-text">
+              <strong>Textos de trayectoria:</strong> descripción de cada etapa (Inversiones, Descorchados, Valdivieso, Gourmand) y subtítulo de la página
+            </span>
+          </li>
+          <li>
+            <span class="item-text">
+              <strong>Fotos por área</strong> para la sección "Trabaja conmigo":
+              <span class="note">Comunicación &amp; Eventos: fotos de El Mundo del Vino, Odfjell, Barrica 94, Descorchados. Catas &amp; Maridajes: fotos de catas. Podcast: foto con micrófono (la que mencionaste).</span>
+            </span>
+          </li>
+          <li>
+            <span class="item-text">
+              <strong>Logo sin @:</strong> el logo actual tiene "@detripascorazonvinos" dentro de la imagen. Si tienes una versión sin el @, la usamos. Si no, creamos una alternativa.
             </span>
           </li>
         </ol>
       </section>
 
-      <!-- SECCIÓN 3: SIGUIENTES PASOS -->
+      <!-- SECCIÓN 3: PENDIENTE DE DECISIÓN -->
       <section class="section">
         <h2 class="section-title">
           <span class="dot dot-gray"></span>
+          Pendiente de decisión
+        </h2>
+        <ul class="checklist">
+          <li>
+            <span class="check-icon check-later">·</span>
+            <span class="item-text">
+              <strong>Color de fondo:</strong> mencionaste que el blanco te parece muy simple. Lo revisamos después de tener los textos y fotos reales, cuando el sitio esté más completo visualmente.
+              <span class="note">Referencia que mencionaste: amandabarnes.co.uk (azul). Podemos explorar opciones entonces.</span>
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-later">·</span>
+            <span class="item-text">
+              <strong>Collage de fotos por área:</strong> idea aprobada, implementación cuando lleguen las fotos.
+            </span>
+          </li>
+          <li>
+            <span class="check-icon check-later">·</span>
+            <span class="item-text">
+              <strong>Migración de dominio:</strong> mariapazjimenez.cl apunta a HostingPlus. Lo cambiamos a Netlify cuando el contenido esté listo y aprobado.
+              <span class="note">Paso previo: confirmar que el email mariapaz@mariapazjimenez.cl no depende del hosting web.</span>
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- SECCIÓN 4: SIGUIENTES PASOS -->
+      <section class="section">
+        <h2 class="section-title">
+          <span class="dot dot-green"></span>
           Siguientes pasos
         </h2>
         <div class="timeline">
           <div class="timeline-item">
-            <span class="phase">Ahora</span>
-            <span>Revisas el preview y me dices qué cambiar en diseño o estructura</span>
-          </div>
-          <div class="timeline-item">
             <span class="phase">Tú me envías</span>
-            <span>Los textos via la hoja de contenidos</span>
+            <span>Fotos y textos según la lista de arriba</span>
           </div>
           <div class="timeline-item">
             <span class="phase">Yo integro</span>
-            <span>Pego el contenido, ajustes finales de diseño — 1 a 2 días</span>
+            <span>Pego el contenido, ajusto el collage de fotos y afino detalles — 1 a 2 días desde que llega todo</span>
           </div>
           <div class="timeline-item">
             <span class="phase">Revisión final</span>
@@ -367,12 +432,12 @@
         </div>
       </section>
 
-    </div><!-- /container -->
+    </div>
   </main>
 
   <!-- FOOTER -->
   <footer class="page-footer">
-    Proyecto desarrollado por <a href="https://evo.cl" target="_blank">EVO Communication Lab</a> para María Paz Jiménez · 2026
+    Proyecto desarrollado por <a href="https://evo.cl" target="_blank">EVO Creative Lab</a> para María Paz Jiménez · 2026
   </footer>
 
 </body>
