@@ -93,18 +93,20 @@ import manifest from '../data/raw-images-manifest.json';
   // Parse manifest
   const manifest = JSON.parse(document.getElementById('manifest-data').textContent);
 
-  // Flatten manifest for gallery
+  // Aplana el manifiesto para la galeria.
+  //
+  // IMPORTANTE: cada foto tiene un ID FIJO que viene del manifiesto (v2), no su
+  // posicion en la lista. Por eso se pueden agregar o quitar fotos sin que la
+  // seleccion ya guardada apunte a fotos equivocadas.
   const allFiles = [];
-  
-  // Index lists mapping to retrieve indices easily
-  const fileToIndexMap = {};
-  
+
   const mapFolderFiles = (group, key) => {
-    const list = manifest[group][key] || [];
-    list.forEach((src, idx) => {
-      const globalIndex = allFiles.length;
-      fileToIndexMap[src] = idx;
-      allFiles.push({ src, folder: group, subFolder: key, index: idx, globalIndex });
+    const list = (manifest[group] && manifest[group][key]) || [];
+    list.forEach((item, idx) => {
+      // v2: { id, src }. Compatibilidad con v1: string suelto, id = posicion.
+      const src = typeof item === 'string' ? item : item.src;
+      const id = typeof item === 'string' ? allFiles.length : item.id;
+      allFiles.push({ src, id, folder: group, subFolder: key, index: idx });
     });
   };
 
@@ -116,7 +118,7 @@ import manifest from '../data/raw-images-manifest.json';
   mapFolderFiles('trayectoria', 'vina_valdivieso');
   mapFolderFiles('trayectoria', 'revista_gourmand');
 
-  // Selections state (contains indices of the manifest arrays instead of paths for compactness)
+  // Estado de la seleccion: guarda los IDs fijos de cada foto (no posiciones).
   let selections = {
     comunicacion_eventos: [],
     catas_maridajes: [],
@@ -368,7 +370,7 @@ import manifest from '../data/raw-images-manifest.json';
 
       // Check if image index is selected in any section
       const selectedSections = sections.filter(sec => 
-        selections[sec.key].includes(item.globalIndex)
+        selections[sec.key].includes(item.id)
       );
 
       if (selectedSections.length > 0) {
@@ -382,11 +384,11 @@ import manifest from '../data/raw-images-manifest.json';
       let trayPills = '';
 
       sections.forEach(sec => {
-        const isActive = selections[sec.key].includes(item.globalIndex);
+        const isActive = selections[sec.key].includes(item.id);
         const pillHTML = `
           <button 
             class="pill-btn ${isActive ? 'active' : ''}" 
-            data-global-index="${item.globalIndex}" 
+            data-photo-id="${item.id}" 
             data-section="${sec.key}"
           >
             ${sec.label.split(' ')[0]}
@@ -420,22 +422,22 @@ import manifest from '../data/raw-images-manifest.json';
       // Handle Pill Toggle Click
       card.querySelectorAll('.pill-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const globalIdx = parseInt(btn.dataset.globalIndex, 10);
+          const photoId = parseInt(btn.dataset.photoId, 10);
           const section = btn.dataset.section;
           const isActive = btn.classList.contains('active');
 
           if (isActive) {
-            selections[section] = selections[section].filter(i => i !== globalIdx);
+            selections[section] = selections[section].filter(i => i !== photoId);
             btn.classList.remove('active');
           } else {
-            if (!selections[section].includes(globalIdx)) {
-              selections[section].push(globalIdx);
+            if (!selections[section].includes(photoId)) {
+              selections[section].push(photoId);
             }
             btn.classList.add('active');
           }
 
           // Toggle glow border on card
-          const hasAny = sections.some(sec => selections[sec.key].includes(globalIdx));
+          const hasAny = sections.some(sec => selections[sec.key].includes(photoId));
           if (hasAny) {
             card.classList.add('has-selections');
           } else {

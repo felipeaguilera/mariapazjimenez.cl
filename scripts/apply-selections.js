@@ -56,12 +56,20 @@ async function run() {
   }
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
-  // Recreate the flat allFiles list in the exact order as frontend
-  const allFiles = [];
+  // Mapa ID fijo -> ruta de la foto.
+  //
+  // Los numeros que guarda /organizer son los IDs del manifiesto (v2), NO la
+  // posicion en la lista. Por eso agregar fotos nuevas no descoloca la seleccion.
+  const srcById = new Map();
   const mapFolderFiles = (group, key) => {
-    const list = manifest[group][key] || [];
-    list.forEach(src => {
-      allFiles.push(src);
+    const list = (manifest[group] && manifest[group][key]) || [];
+    list.forEach((item, idx) => {
+      // v2: { id, src }. Compatibilidad con v1: string suelto, id = posicion global.
+      if (typeof item === 'string') {
+        srcById.set(srcById.size, item);
+      } else {
+        srcById.set(item.id, item.src);
+      }
     });
   };
 
@@ -80,10 +88,10 @@ async function run() {
       return [];
     }
 
-    return indexList.map((globalIdx, listIndex) => {
-      const src = allFiles[globalIdx];
+    return indexList.map((photoId, listIndex) => {
+      const src = srcById.get(photoId);
       if (!src) {
-        console.warn(`  Advertencia: Índice global [${globalIdx}] fuera de rango en el manifiesto para ${sectionKey}`);
+        console.warn(`  Advertencia: el ID [${photoId}] no existe en el manifiesto (${sectionKey}). Se omite. Puede que esa foto se haya borrado o renombrado.`);
         return null;
       }
 
