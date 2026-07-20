@@ -1,0 +1,695 @@
+---
+import Base from '../layouts/Base.astro';
+import manifest from '../data/raw-images-manifest.json';
+---
+
+<Base title="Organizador de Fotos — María Paz Jiménez">
+  <div class="organizer-container">
+    <header class="organizer-header">
+      <h1 class="organizer-title">Organizador de Fotografías</h1>
+      <p class="organizer-subtitle">
+        Selecciona las fotos para cada sección, ordénalas y ajusta el encuadre vertical de forma interactiva. Al finalizar, descarga la configuración.
+      </p>
+    </header>
+
+    <div class="organizer-layout">
+      <!-- Sidebar Sections Nav -->
+      <aside class="sections-sidebar">
+        <h2 class="sidebar-title">Secciones</h2>
+        <div class="sidebar-nav">
+          <div class="nav-group">
+            <span class="group-label">Inicio (Trabaja conmigo)</span>
+            <button class="nav-btn active" data-section="comunicacion_eventos">Comunicación & Eventos</button>
+            <button class="nav-btn" data-section="catas_maridajes">Catas & Maridajes</button>
+            <button class="nav-btn" data-section="podcast">Podcast Vinos con Marypepa</button>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Trayectoria</span>
+            <button class="nav-btn" data-section="mi_empresa">Mi Empresa (2007-Act)</button>
+            <button class="nav-btn" data-section="descorchados">Descorchados (2009-2026)</button>
+            <button class="nav-btn" data-section="vina_valdivieso">Viña Valdivieso (2002-2006)</button>
+            <button class="nav-btn" data-section="revista_gourmand">Revista Gourmand (1999-2002)</button>
+          </div>
+        </div>
+
+        <div class="sidebar-actions">
+          <button id="download-json-btn" class="btn-primary-download">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar Configuración
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Panel -->
+      <main class="organizer-main">
+        <!-- Gallery Grid -->
+        <section class="gallery-column">
+          <div class="column-header">
+            <h2>Galería Disponible</h2>
+            <span class="count-badge" id="available-count">0 fotos</span>
+          </div>
+          <div class="grid-scroll">
+            <div class="image-grid" id="available-grid"></div>
+          </div>
+        </section>
+
+        <!-- Selection & Ordering Panel -->
+        <section class="selection-column">
+          <div class="column-header">
+            <h2>Fotos Seleccionadas (Orden y Encuadre 2:3)</h2>
+            <span class="count-badge" id="selected-count">0 seleccionadas</span>
+          </div>
+          <div class="grid-scroll">
+            <div class="selected-list" id="selected-list"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<!-- Pass raw manifest to client script -->
+<script is:inline id="manifest-data" type="application/json" set:html={JSON.stringify(manifest)}></script>
+
+<script>
+  // Parse manifest from HTML
+  const manifest = JSON.parse(document.getElementById('manifest-data').textContent);
+
+  // Map backend key to frontend sections
+  const keyToGroup = {
+    comunicacion_eventos: ['trabaja_conmigo', 'comunicacion_eventos'],
+    catas_maridajes: ['trabaja_conmigo', 'catas_maridajes'],
+    podcast: ['trabaja_conmigo', 'podcast'],
+    mi_empresa: ['trayectoria', 'mi_empresa'],
+    descorchados: ['trayectoria', 'descorchados'],
+    vina_valdivieso: ['trayectoria', 'vina_valdivieso'],
+    revista_gourmand: ['trayectoria', 'revista_gourmand']
+  };
+
+  // State
+  let activeSection = 'comunicacion_eventos';
+  
+  // Selections state format: { [sectionKey]: [{ src: string, position: string }, ...] }
+  let selections = {
+    comunicacion_eventos: [],
+    catas_maridajes: [],
+    podcast: [],
+    mi_empresa: [],
+    descorchados: [],
+    vina_valdivieso: [],
+    revista_gourmand: []
+  };
+
+  // Try to load pre-existing state from localStorage
+  const savedState = localStorage.getItem('mpj-image-selections');
+  if (savedState) {
+    try {
+      selections = { ...selections, ...JSON.parse(savedState) };
+    } catch (e) {
+      console.error('Error parsing saved state', e);
+    }
+  }
+
+  // DOM Elements
+  const navButtons = document.querySelectorAll('.nav-btn');
+  const availableGrid = document.getElementById('available-grid');
+  const selectedList = document.getElementById('selected-list');
+  const availableCount = document.getElementById('available-count');
+  const selectedCount = document.getElementById('selected-count');
+  const downloadBtn = document.getElementById('download-json-btn');
+
+  // Init
+  switchSection(activeSection);
+
+  // Switch Sections
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSection = btn.dataset.section;
+      switchSection(activeSection);
+    });
+  });
+
+  function switchSection(sectionKey) {
+    const [group, key] = keyToGroup[sectionKey];
+    const allFiles = manifest[group][key] || [];
+
+    // Render counts
+    availableCount.textContent = `${allFiles.length} fotos`;
+    selectedCount.textContent = `${selections[sectionKey].length} seleccionadas`;
+
+    // Render Available Grid
+    availableGrid.innerHTML = '';
+    if (allFiles.length === 0) {
+      availableGrid.innerHTML = '<p class="empty-message">Esta carpeta está vacía.</p>';
+    } else {
+      allFiles.forEach(src => {
+        const isSelected = selections[sectionKey].some(item => item.src === src);
+        const card = document.createElement('div');
+        card.className = `photo-card ${isSelected ? 'selected' : ''}`;
+        
+        const fileName = src.split('/').pop();
+        card.innerHTML = `
+          <div class="card-thumb">
+            <img src="${src}" alt="" loading="lazy" />
+          </div>
+          <div class="card-meta">
+            <span class="file-name" title="${fileName}">${fileName}</span>
+            <button class="select-btn">${isSelected ? 'Deseleccionar' : 'Seleccionar'}</button>
+          </div>
+        `;
+
+        card.querySelector('.select-btn').addEventListener('click', () => {
+          toggleSelection(sectionKey, src);
+        });
+
+        availableGrid.appendChild(card);
+      });
+    }
+
+    // Render Selected List
+    renderSelectedList(sectionKey);
+  }
+
+  function renderSelectedList(sectionKey) {
+    selectedList.innerHTML = '';
+    const currentSelections = selections[sectionKey];
+
+    if (currentSelections.length === 0) {
+      selectedList.innerHTML = '<p class="empty-message">No has seleccionado fotos para esta sección aún. Elige fotos del panel izquierdo.</p>';
+      return;
+    }
+
+    currentSelections.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'selected-item-row';
+      const fileName = item.src.split('/').pop();
+
+      card.innerHTML = `
+        <div class="item-drag-controls">
+          <button class="order-btn up-btn" ${index === 0 ? 'disabled' : ''}>▲</button>
+          <span class="order-number">${index + 1}</span>
+          <button class="order-btn down-btn" ${index === currentSelections.length - 1 ? 'disabled' : ''}>▼</button>
+        </div>
+        
+        <div class="item-preview-frame">
+          <img src="${item.src}" alt="" style="object-position: ${item.position}" />
+          <span class="preview-badge">Vista 2:3</span>
+        </div>
+
+        <div class="item-settings">
+          <span class="item-name" title="${fileName}">${fileName}</span>
+          <div class="setting-row">
+            <label>Alineación vertical:</label>
+            <select class="position-select">
+              <option value="center" ${item.position === 'center' ? 'selected' : ''}>Centro</option>
+              <option value="top" ${item.position === 'top' ? 'selected' : ''}>Arriba (cabeza)</option>
+              <option value="bottom" ${item.position === 'bottom' ? 'selected' : ''}>Abajo (pies)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="remove-item-btn" title="Quitar">×</button>
+      `;
+
+      // Event handlers
+      card.querySelector('.position-select').addEventListener('change', (e) => {
+        updateItemPosition(sectionKey, index, e.target.value);
+      });
+
+      card.querySelector('.up-btn').addEventListener('click', () => {
+        moveItem(sectionKey, index, -1);
+      });
+
+      card.querySelector('.down-btn').addEventListener('click', () => {
+        moveItem(sectionKey, index, 1);
+      });
+
+      card.querySelector('.remove-item-btn').addEventListener('click', () => {
+        toggleSelection(sectionKey, item.src);
+      });
+
+      selectedList.appendChild(card);
+    });
+  }
+
+  function toggleSelection(sectionKey, src) {
+    const existsIndex = selections[sectionKey].findIndex(item => item.src === src);
+    if (existsIndex > -1) {
+      selections[sectionKey].splice(existsIndex, 1);
+    } else {
+      selections[sectionKey].push({ src, position: 'center' });
+    }
+    saveState();
+    switchSection(sectionKey);
+  }
+
+  function updateItemPosition(sectionKey, index, position) {
+    selections[sectionKey][index].position = position;
+    saveState();
+    // Update live preview element style directly without full re-render to keep select focus
+    const previews = selectedList.querySelectorAll('.item-preview-frame img');
+    if (previews[index]) {
+      previews[index].style.objectPosition = position;
+    }
+  }
+
+  function moveItem(sectionKey, index, direction) {
+    const targetIdx = index + direction;
+    if (targetIdx < 0 || targetIdx >= selections[sectionKey].length) return;
+    
+    // Swap
+    const temp = selections[sectionKey][index];
+    selections[sectionKey][index] = selections[sectionKey][targetIdx];
+    selections[sectionKey][targetIdx] = temp;
+
+    saveState();
+    switchSection(sectionKey);
+  }
+
+  function saveState() {
+    localStorage.setItem('mpj-image-selections', JSON.stringify(selections));
+  }
+
+  // Handle JSON download
+  downloadBtn.addEventListener('click', () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(selections, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href",     dataStr);
+    downloadAnchor.setAttribute("download", "fotos-seleccionadas.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  });
+</script>
+
+<style>
+  .organizer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    font-family: var(--font-sans);
+    color: var(--text);
+  }
+
+  .organizer-header {
+    margin-bottom: 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+  }
+
+  .organizer-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #880000;
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .organizer-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .organizer-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 1fr;
+    gap: 24px;
+    height: 70vh;
+    min-height: 550px;
+  }
+
+  /* Sidebar */
+  .sections-sidebar {
+    background: #FFF;
+    border: 1px solid var(--border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+
+  .sidebar-title {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+    margin-bottom: 20px;
+  }
+
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .group-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #880000;
+    margin-bottom: 6px;
+    opacity: 0.85;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+  }
+
+  .nav-btn:hover {
+    background: var(--surface);
+    color: #880000;
+  }
+
+  .nav-btn.active {
+    background: var(--accent-lt);
+    border-left-color: #880000;
+    color: #880000;
+    font-weight: 500;
+  }
+
+  .sidebar-actions {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .btn-primary-download {
+    width: 100%;
+    background: #880000;
+    color: var(--white);
+    border: none;
+    padding: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .btn-primary-download:hover {
+    background: #5f0000;
+  }
+
+  /* Columns */
+  .gallery-column,
+  .selection-column {
+    background: #FFF;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+
+  .column-header {
+    background: var(--surface);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .column-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: var(--font-sans);
+  }
+
+  .count-badge {
+    background: rgba(136, 0, 0, 0.1);
+    color: #880000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .grid-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  /* Available Grid */
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 16px;
+  }
+
+  .photo-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    transition: all 0.2s ease;
+  }
+
+  .photo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    border-color: #880000;
+  }
+
+  .photo-card.selected {
+    border-color: #880000;
+    background: var(--accent-lt);
+  }
+
+  .card-thumb {
+    aspect-ratio: 2 / 3; /* Render 2:3 vertical thumbnails */
+    background: var(--surface);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .card-meta {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .file-name {
+    font-size: 11px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var(--muted);
+  }
+
+  .select-btn {
+    border: 1px solid var(--border);
+    background: #FFF;
+    padding: 6px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .photo-card.selected .select-btn {
+    background: #880000;
+    color: #FFF;
+    border-color: #880000;
+  }
+
+  .select-btn:hover {
+    border-color: #880000;
+    color: #880000;
+  }
+
+  .photo-card.selected .select-btn:hover {
+    background: #5f0000;
+    color: #FFF;
+  }
+
+  /* Selected List (Right Column) */
+  .selected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .selected-item-row {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    background: #FFF;
+    padding: 10px;
+    border-radius: 4px;
+    gap: 16px;
+    position: relative;
+  }
+
+  .item-drag-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .order-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 10px;
+  }
+
+  .order-btn:hover:not(:disabled) {
+    color: #880000;
+  }
+
+  .order-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+
+  .order-number {
+    font-size: 12px;
+    font-weight: 600;
+    color: #880000;
+  }
+
+  .item-preview-frame {
+    width: 60px;
+    aspect-ratio: 2 / 3; /* Strict 2:3 vertical frame for live preview */
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    background: var(--surface);
+  }
+
+  .item-preview-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: object-position 0.15s ease;
+  }
+
+  .preview-badge {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    background: rgba(0,0,0,0.65);
+    color: #FFF;
+    padding: 1px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .item-settings {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item-name {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 180px;
+  }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .setting-row label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .position-select {
+    padding: 4px 6px;
+    font-size: 11px;
+    border: 1px solid var(--border);
+    background: #FFF;
+    border-radius: 3px;
+  }
+
+  .remove-item-btn {
+    border: none;
+    background: none;
+    font-size: 20px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s ease;
+  }
+
+  .remove-item-btn:hover {
+    color: #880000;
+  }
+
+  .empty-message {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 40px;
+    line-height: 1.6;
+  }
+
+  /* Responsive height adjustment */
+  @media (max-height: 700px) {
+    .organizer-layout {
+      height: 60vh;
+    }
+  }
+</style>
