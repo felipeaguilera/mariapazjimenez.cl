@@ -97,8 +97,9 @@ import manifest from '../data/raw-images-manifest.json';
   const mapFolderFiles = (group, key) => {
     const list = manifest[group][key] || [];
     list.forEach((src, idx) => {
+      const globalIndex = allFiles.length;
       fileToIndexMap[src] = idx;
-      allFiles.push({ src, folder: group, subFolder: key, index: idx });
+      allFiles.push({ src, folder: group, subFolder: key, index: idx, globalIndex });
     });
   };
 
@@ -272,7 +273,7 @@ import manifest from '../data/raw-images-manifest.json';
 
       // Check if image index is selected in any section
       const selectedSections = sections.filter(sec => 
-        selections[sec.key].includes(item.index)
+        selections[sec.key].includes(item.globalIndex)
       );
 
       if (selectedSections.length > 0) {
@@ -286,11 +287,11 @@ import manifest from '../data/raw-images-manifest.json';
       let trayPills = '';
 
       sections.forEach(sec => {
-        const isActive = selections[sec.key].includes(item.index);
+        const isActive = selections[sec.key].includes(item.globalIndex);
         const pillHTML = `
           <button 
             class="pill-btn ${isActive ? 'active' : ''}" 
-            data-src-index="${item.index}" 
+            data-global-index="${item.globalIndex}" 
             data-section="${sec.key}"
           >
             ${sec.label.split(' ')[0]}
@@ -324,22 +325,22 @@ import manifest from '../data/raw-images-manifest.json';
       // Handle Pill Toggle Click
       card.querySelectorAll('.pill-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const idx = parseInt(btn.dataset.srcIndex, 10);
+          const globalIdx = parseInt(btn.dataset.globalIndex, 10);
           const section = btn.dataset.section;
           const isActive = btn.classList.contains('active');
 
           if (isActive) {
-            selections[section] = selections[section].filter(i => i !== idx);
+            selections[section] = selections[section].filter(i => i !== globalIdx);
             btn.classList.remove('active');
           } else {
-            if (!selections[section].includes(idx)) {
-              selections[section].push(idx);
+            if (!selections[section].includes(globalIdx)) {
+              selections[section].push(globalIdx);
             }
             btn.classList.add('active');
           }
 
           // Toggle glow border on card
-          const hasAny = sections.some(sec => selections[sec.key].includes(idx));
+          const hasAny = sections.some(sec => selections[sec.key].includes(globalIdx));
           if (hasAny) {
             card.classList.add('has-selections');
           } else {

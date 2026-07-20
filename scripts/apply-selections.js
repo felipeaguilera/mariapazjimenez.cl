@@ -56,16 +56,22 @@ async function run() {
   }
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
-  // Mapping from frontend section key to manifest folder path
-  const keyToManifestPath = {
-    comunicacion_eventos: ['trabaja_conmigo', 'comunicacion_eventos'],
-    catas_maridajes: ['trabaja_conmigo', 'catas_maridajes'],
-    podcast: ['trabaja_conmigo', 'podcast'],
-    mi_empresa: ['trayectoria', 'mi_empresa'],
-    descorchados: ['trayectoria', 'descorchados'],
-    vina_valdivieso: ['trayectoria', 'vina_valdivieso'],
-    revista_gourmand: ['trayectoria', 'revista_gourmand']
+  // Recreate the flat allFiles list in the exact order as frontend
+  const allFiles = [];
+  const mapFolderFiles = (group, key) => {
+    const list = manifest[group][key] || [];
+    list.forEach(src => {
+      allFiles.push(src);
+    });
   };
+
+  mapFolderFiles('trabaja_conmigo', 'comunicacion_eventos');
+  mapFolderFiles('trabaja_conmigo', 'catas_maridajes');
+  mapFolderFiles('trabaja_conmigo', 'podcast');
+  mapFolderFiles('trayectoria', 'mi_empresa');
+  mapFolderFiles('trayectoria', 'descorchados');
+  mapFolderFiles('trayectoria', 'vina_valdivieso');
+  mapFolderFiles('trayectoria', 'revista_gourmand');
 
   // Helper to copy and rename files using manifest indices
   const processSectionImages = (sectionKey, indexList) => {
@@ -74,13 +80,10 @@ async function run() {
       return [];
     }
 
-    const [group, key] = keyToManifestPath[sectionKey];
-    const sectionFiles = manifest[group][key] || [];
-
-    return indexList.map((idx, listIndex) => {
-      const src = sectionFiles[idx];
+    return indexList.map((globalIdx, listIndex) => {
+      const src = allFiles[globalIdx];
       if (!src) {
-        console.warn(`  Advertencia: Índice [${idx}] fuera de rango en el manifiesto para ${sectionKey}`);
+        console.warn(`  Advertencia: Índice global [${globalIdx}] fuera de rango en el manifiesto para ${sectionKey}`);
         return null;
       }
 
