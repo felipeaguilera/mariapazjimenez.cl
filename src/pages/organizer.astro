@@ -8,9 +8,18 @@ import manifest from '../data/raw-images-manifest.json';
     <header class="organizer-header">
       <h1 class="organizer-title">Selección y Categorización de Fotos</h1>
       <p class="organizer-subtitle">
-        Navega por las fotos disponibles. Para cada foto que desees usar en la web, marca la casilla o casillas de las secciones donde debería aparecer. Al finalizar, descarga el archivo de configuración al final de la página.
+        Navega por las fotos. Haz clic en los botones de sección debajo de cada imagen para asignarla. Los cambios se guardan automáticamente en tu navegador y puedes subirlos a la nube con el botón flotante inferior.
       </p>
     </header>
+
+    <!-- Cloud Status Bar -->
+    <div class="cloud-status-bar">
+      <span class="status-indicator" id="cloud-status-text">Cargando selección guardada desde la nube...</span>
+      <button id="sync-cloud-btn" class="btn-sync">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        Sincronizar nube
+      </button>
+    </div>
 
     <!-- Filters Section -->
     <div class="filters-row">
@@ -28,14 +37,14 @@ import manifest from '../data/raw-images-manifest.json';
     <footer class="sticky-footer">
       <div class="footer-content">
         <div class="summary-counters">
-          <span class="summary-title">Seleccionadas:</span>
+          <span class="summary-title">Resumen:</span>
           <div class="counter-item">
             <span class="counter-dot com"></span>
-            <span class="counter-label">Com. & Eventos: <strong id="count-com">0</strong></span>
+            <span class="counter-label">Eventos: <strong id="count-com">0</strong></span>
           </div>
           <div class="counter-item">
             <span class="counter-dot cat"></span>
-            <span class="counter-label">Catas & Maridajes: <strong id="count-cat">0</strong></span>
+            <span class="counter-label">Catas: <strong id="count-cat">0</strong></span>
           </div>
           <div class="counter-item">
             <span class="counter-dot pod"></span>
@@ -43,7 +52,7 @@ import manifest from '../data/raw-images-manifest.json';
           </div>
           <div class="counter-item">
             <span class="counter-dot emp"></span>
-            <span class="counter-label">Mi Empresa: <strong id="count-emp">0</strong></span>
+            <span class="counter-label">Empresa: <strong id="count-emp">0</strong></span>
           </div>
           <div class="counter-item">
             <span class="counter-dot des"></span>
@@ -51,17 +60,17 @@ import manifest from '../data/raw-images-manifest.json';
           </div>
           <div class="counter-item">
             <span class="counter-dot val"></span>
-            <span class="counter-label">V. Valdivieso: <strong id="count-val">0</strong></span>
+            <span class="counter-label">Valdivieso: <strong id="count-val">0</strong></span>
           </div>
           <div class="counter-item">
             <span class="counter-dot gou"></span>
-            <span class="counter-label">R. Gourmand: <strong id="count-gou">0</strong></span>
+            <span class="counter-label">Gourmand: <strong id="count-gou">0</strong></span>
           </div>
         </div>
 
-        <button id="download-json-btn" class="btn-download-json">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Descargar Selección (JSON)
+        <button id="save-cloud-btn" class="btn-save-cloud">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Guardar Cambios en la Nube
         </button>
       </div>
     </footer>
@@ -72,27 +81,36 @@ import manifest from '../data/raw-images-manifest.json';
 <script is:inline id="manifest-data" type="application/json" set:html={JSON.stringify(manifest)}></script>
 
 <script>
+  const API_URL = "https://keyvalue.immanuel.co/api/KeyVal";
+  const APP_KEY = "ecmcx7yj";
+  const ITEM_KEY = "selections";
+
   // Parse manifest
   const manifest = JSON.parse(document.getElementById('manifest-data').textContent);
 
-  // Flatten all files from manifest for easier rendering
+  // Flatten manifest for gallery
   const allFiles = [];
   
-  // Trabaja Conmigo files
-  Object.keys(manifest.trabaja_conmigo).forEach(subKey => {
-    manifest.trabaja_conmigo[subKey].forEach(src => {
-      allFiles.push({ src, folder: 'trabaja_conmigo', subFolder: subKey });
+  // Index lists mapping to retrieve indices easily
+  const fileToIndexMap = {};
+  
+  const mapFolderFiles = (group, key) => {
+    const list = manifest[group][key] || [];
+    list.forEach((src, idx) => {
+      fileToIndexMap[src] = idx;
+      allFiles.push({ src, folder: group, subFolder: key, index: idx });
     });
-  });
+  };
 
-  // Trayectoria files
-  Object.keys(manifest.trayectoria).forEach(subKey => {
-    manifest.trayectoria[subKey].forEach(src => {
-      allFiles.push({ src, folder: 'trayectoria', subFolder: subKey });
-    });
-  });
+  mapFolderFiles('trabaja_conmigo', 'comunicacion_eventos');
+  mapFolderFiles('trabaja_conmigo', 'catas_maridajes');
+  mapFolderFiles('trabaja_conmigo', 'podcast');
+  mapFolderFiles('trayectoria', 'mi_empresa');
+  mapFolderFiles('trayectoria', 'descorchados');
+  mapFolderFiles('trayectoria', 'vina_valdivieso');
+  mapFolderFiles('trayectoria', 'revista_gourmand');
 
-  // Selections state: { [sectionKey]: string[] } (list of image paths)
+  // Selections state (contains indices of the manifest arrays instead of paths for compactness)
   let selections = {
     comunicacion_eventos: [],
     catas_maridajes: [],
@@ -103,34 +121,42 @@ import manifest from '../data/raw-images-manifest.json';
     revista_gourmand: []
   };
 
-  // Sections definitions for rendering checkboxes
+  // Section details
   const sections = [
-    { key: 'comunicacion_eventos', label: 'Comunicación & Eventos (Inicio)', group: 'Inicio' },
-    { key: 'catas_maridajes', label: 'Catas & Maridajes (Inicio)', group: 'Inicio' },
-    { key: 'podcast', label: 'Podcast Vinos con Marypepa (Inicio)', group: 'Inicio' },
-    { key: 'mi_empresa', label: 'Mi Empresa 2007-Act (Trayectoria)', group: 'Trayectoria' },
-    { key: 'descorchados', label: 'Descorchados 2009-2026 (Trayectoria)', group: 'Trayectoria' },
-    { key: 'vina_valdivieso', label: 'Viña Valdivieso 2002-2006 (Trayectoria)', group: 'Trayectoria' },
-    { key: 'revista_gourmand', label: 'Revista Gourmand 1999-2002 (Trayectoria)', group: 'Trayectoria' }
+    { key: 'comunicacion_eventos', label: 'Eventos', group: 'Inicio' },
+    { key: 'catas_maridajes', label: 'Catas', group: 'Inicio' },
+    { key: 'podcast', label: 'Podcast', group: 'Inicio' },
+    { key: 'mi_empresa', label: 'Mi Empresa', group: 'Trayectoria' },
+    { key: 'descorchados', label: 'Descorchados', group: 'Trayectoria' },
+    { key: 'vina_valdivieso', label: 'Valdivieso', group: 'Trayectoria' },
+    { key: 'revista_gourmand', label: 'Gourmand', group: 'Trayectoria' }
   ];
 
-  // Try to load pre-existing state
-  const savedState = localStorage.getItem('mpj-simple-selections');
-  if (savedState) {
-    try {
-      selections = { ...selections, ...JSON.parse(savedState) };
-    } catch (e) {
-      console.error('Error loading saved state', e);
+  // Base64URL encoding/decoding utilities
+  function base64urlEncode(str) {
+    return btoa(unescape(encodeURIComponent(str)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  }
+
+  function base64urlDecode(str) {
+    if (!str) return '';
+    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (base64.length % 4) {
+      base64 += '=';
     }
+    return decodeURIComponent(escape(atob(base64)));
   }
 
   // DOM Elements
   const photosGrid = document.getElementById('photos-grid');
   const filterButtons = document.querySelectorAll('.filter-btn');
-  const downloadBtn = document.getElementById('download-json-btn');
-  
-  // Counters DOM elements
-  const counts = {
+  const saveCloudBtn = document.getElementById('save-cloud-btn');
+  const syncCloudBtn = document.getElementById('sync-cloud-btn');
+  const cloudStatusText = document.getElementById('cloud-status-text');
+
+  const counters = {
     comunicacion_eventos: document.getElementById('count-com'),
     catas_maridajes: document.getElementById('count-cat'),
     podcast: document.getElementById('count-pod'),
@@ -140,109 +166,194 @@ import manifest from '../data/raw-images-manifest.json';
     revista_gourmand: document.getElementById('count-gou')
   };
 
-  // State
-  let currentFilter = 'all';
-
-  // Init
-  renderGallery();
-  updateCounters();
-
-  // Filters Event
+  // Switch Filters
   filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       filterButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
-      renderGallery();
+      renderGallery(btn.dataset.filter);
     });
   });
 
-  // Render Gallery function
-  function renderGallery() {
-    photosGrid.innerHTML = '';
+  // Load selections from cloud
+  async function loadFromCloud() {
+    cloudStatusText.textContent = "Cargando selección guardada desde la nube...";
+    cloudStatusText.className = "status-indicator loading";
     
-    const filteredFiles = allFiles.filter(item => {
-      if (currentFilter === 'all') return true;
-      return item.folder === currentFilter;
-    });
-
-    if (filteredFiles.length === 0) {
-      photosGrid.innerHTML = '<p class="empty-msg">No se encontraron fotos en esta categoría.</p>';
-      return;
+    try {
+      const res = await fetch(`${API_URL}/GetValue/${APP_KEY}/${ITEM_KEY}`);
+      if (res.ok) {
+        const encrypted = await res.json();
+        if (encrypted && encrypted.trim() !== "") {
+          const decrypted = base64urlDecode(encrypted);
+          const parsed = JSON.parse(decrypted);
+          
+          // Apply selections
+          Object.keys(selections).forEach(key => {
+            selections[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
+          });
+          
+          localStorage.setItem('mpj-cloud-selections', JSON.stringify(selections));
+          cloudStatusText.textContent = "Selección sincronizada con la nube.";
+          cloudStatusText.className = "status-indicator success";
+        } else {
+          cloudStatusText.textContent = "Sin selección previa en la nube. ¡Empieza a elegir!";
+          cloudStatusText.className = "status-indicator info";
+        }
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      cloudStatusText.textContent = "Error al conectar con la nube. Cargando datos locales...";
+      cloudStatusText.className = "status-indicator error";
+      
+      // Fallback to local storage
+      const saved = localStorage.getItem('mpj-cloud-selections');
+      if (saved) {
+        selections = JSON.parse(saved);
+      }
     }
+
+    renderGallery();
+    updateCounters();
+  }
+
+  // Save selections to cloud
+  async function saveToCloud() {
+    saveCloudBtn.disabled = true;
+    saveCloudBtn.textContent = "Guardando...";
+    cloudStatusText.textContent = "Guardando selección en el servidor...";
+    cloudStatusText.className = "status-indicator loading";
+
+    const dataString = JSON.stringify(selections);
+    const encrypted = base64urlEncode(dataString);
+
+    try {
+      const res = await fetch(`${API_URL}/UpdateValue/${APP_KEY}/${ITEM_KEY}/${encrypted}`, {
+        method: 'POST'
+      });
+      if (res.ok) {
+        const val = await res.json();
+        if (val === true || val === "True") {
+          localStorage.setItem('mpj-cloud-selections', dataString);
+          cloudStatusText.textContent = "¡Selección guardada en la nube con éxito!";
+          cloudStatusText.className = "status-indicator success";
+        } else {
+          throw new Error();
+        }
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      cloudStatusText.textContent = "Error de conexión: No se pudo guardar en la nube.";
+      cloudStatusText.className = "status-indicator error";
+      alert("Hubo un error al guardar en la nube. Inténtalo de nuevo.");
+    }
+
+    saveCloudBtn.disabled = false;
+    saveCloudBtn.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Guardar Cambios en la Nube
+    `;
+  }
+
+  // Render visual cards
+  function renderGallery(filter = 'all') {
+    photosGrid.innerHTML = '';
+
+    const filteredFiles = allFiles.filter(item => {
+      if (filter === 'all') return true;
+      return item.folder === filter;
+    });
 
     filteredFiles.forEach(item => {
       const card = document.createElement('div');
       card.className = 'photo-card';
 
-      // Check which sections have this photo selected
-      const isAnySelected = Object.keys(selections).some(sectionKey => 
-        selections[sectionKey].includes(item.src)
+      // Check if image index is selected in any section
+      const selectedSections = sections.filter(sec => 
+        selections[sec.key].includes(item.index)
       );
 
-      if (isAnySelected) {
+      if (selectedSections.length > 0) {
         card.classList.add('has-selections');
       }
 
       const fileName = item.src.split('/').pop();
 
-      // Render Checkboxes
-      let checkboxesHTML = '';
+      // Render Toggle Pills
+      let initPills = '';
+      let trayPills = '';
+
       sections.forEach(sec => {
-        const isChecked = selections[sec.key].includes(item.src);
-        checkboxesHTML += `
-          <label class="checkbox-row ${isChecked ? 'checked' : ''}">
-            <input type="checkbox" data-src="${item.src}" data-section="${sec.key}" ${isChecked ? 'checked' : ''} />
-            <span class="checkmark-box"></span>
-            <span class="checkbox-label">${sec.label}</span>
-          </label>
+        const isActive = selections[sec.key].includes(item.index);
+        const pillHTML = `
+          <button 
+            class="pill-btn ${isActive ? 'active' : ''}" 
+            data-src-index="${item.index}" 
+            data-section="${sec.key}"
+          >
+            ${sec.label.split(' ')[0]}
+          </button>
         `;
+        if (sec.group === 'Inicio') {
+          initPills += pillHTML;
+        } else {
+          trayPills += pillHTML;
+        }
       });
 
       card.innerHTML = `
         <div class="card-image-wrap">
           <img src="${item.src}" alt="" loading="lazy" />
-          <span class="zoom-indicator">Hacer clic para ampliar</span>
+          <span class="zoom-indicator">Clic para ampliar</span>
         </div>
         <div class="card-content">
           <div class="card-filename" title="${fileName}">${fileName}</div>
-          <div class="checkbox-group">
-            ${checkboxesHTML}
+          <div class="pills-group">
+            <span class="pills-group-label">Página de Inicio</span>
+            <div class="pills-row">${initPills}</div>
+          </div>
+          <div class="pills-group">
+            <span class="pills-group-label">Trayectoria</span>
+            <div class="pills-row">${trayPills}</div>
           </div>
         </div>
       `;
 
-      // Checkbox Change Event Handlers
-      card.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => {
-          const target = e.target;
-          const src = target.dataset.src;
-          const section = target.dataset.section;
-          
-          if (target.checked) {
-            if (!selections[section].includes(src)) {
-              selections[section].push(src);
-            }
-            target.closest('.checkbox-row').classList.add('checked');
+      // Handle Pill Toggle Click
+      card.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.srcIndex, 10);
+          const section = btn.dataset.section;
+          const isActive = btn.classList.contains('active');
+
+          if (isActive) {
+            selections[section] = selections[section].filter(i => i !== idx);
+            btn.classList.remove('active');
           } else {
-            selections[section] = selections[section].filter(path => path !== src);
-            target.closest('.checkbox-row').classList.remove('checked');
+            if (!selections[section].includes(idx)) {
+              selections[section].push(idx);
+            }
+            btn.classList.add('active');
           }
 
-          // Update card visual state (glow border if has any selections)
-          const hasAny = Object.keys(selections).some(key => selections[key].includes(src));
+          // Toggle glow border on card
+          const hasAny = sections.some(sec => selections[sec.key].includes(idx));
           if (hasAny) {
             card.classList.add('has-selections');
           } else {
             card.classList.remove('has-selections');
           }
 
-          saveState();
           updateCounters();
+          
+          // Auto-save local draft
+          localStorage.setItem('mpj-cloud-selections', JSON.stringify(selections));
         });
       });
 
-      // Simple Click to Zoom
+      // Zoom click handler
       card.querySelector('.card-image-wrap').addEventListener('click', () => {
         openModal(item.src);
       });
@@ -253,14 +364,10 @@ import manifest from '../data/raw-images-manifest.json';
 
   function updateCounters() {
     Object.keys(selections).forEach(key => {
-      if (counts[key]) {
-        counts[key].textContent = selections[key].length;
+      if (counters[key]) {
+        counters[key].textContent = selections[key].length;
       }
     });
-  }
-
-  function saveState() {
-    localStorage.setItem('mpj-simple-selections', JSON.stringify(selections));
   }
 
   // Zoom Modal
@@ -282,63 +389,101 @@ import manifest from '../data/raw-images-manifest.json';
     document.body.appendChild(modal);
   }
 
-  // Handle Download JSON
-  downloadBtn.addEventListener('click', () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(selections, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href",     dataStr);
-    downloadAnchor.setAttribute("download", "fotos-seleccionadas.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  });
+  // Bind save/sync buttons
+  saveCloudBtn.addEventListener('click', saveToCloud);
+  syncCloudBtn.addEventListener('click', loadFromCloud);
+
+  // Initialize
+  loadFromCloud();
 </script>
 
 <style>
   .organizer-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 24px 140px 24px; /* padding-bottom accounts for the sticky bar */
+    padding: 32px 20px 140px 20px;
     font-family: var(--font-sans);
     color: var(--text);
   }
 
   .organizer-header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 24px;
+    padding-bottom: 20px;
   }
 
   .organizer-title {
-    font-size: 32px;
+    font-size: 30px;
     color: #880000;
     font-family: var(--font-serif);
     font-style: italic;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .organizer-subtitle {
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--muted);
-    max-width: 700px;
+    max-width: 720px;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: 1.5;
+  }
+
+  /* Cloud Status Bar */
+  .cloud-status-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-indicator {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .status-indicator.loading { color: #880000; }
+  .status-indicator.success { color: #2e7d32; font-weight: 600; }
+  .status-indicator.error { color: #c62828; }
+  .status-indicator.info { color: var(--text); }
+
+  .btn-sync {
+    background: #FFF;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    transition: all 0.2s ease;
+  }
+
+  .btn-sync:hover {
+    border-color: #880000;
+    color: #880000;
   }
 
   /* Filters */
   .filters-row {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 32px;
+    gap: 8px;
+    margin-bottom: 24px;
   }
 
   .filter-btn {
     background: #FFF;
     border: 1px solid var(--border);
-    padding: 8px 16px;
-    font-size: 13px;
+    padding: 6px 14px;
+    font-size: 12.5px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -360,8 +505,8 @@ import manifest from '../data/raw-images-manifest.json';
   /* Grid */
   .photos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
   }
 
   .photo-card {
@@ -371,23 +516,23 @@ import manifest from '../data/raw-images-manifest.json';
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     transition: all 0.25s ease;
   }
 
   .photo-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
   }
 
   .photo-card.has-selections {
     border-color: #880000;
-    box-shadow: 0 4px 16px rgba(136, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(136, 0, 0, 0.05);
   }
 
   .card-image-wrap {
     width: 100%;
-    aspect-ratio: 4 / 3; /* Thumbnail horizontal style */
+    aspect-ratio: 4 / 3;
     position: relative;
     overflow: hidden;
     background: var(--surface);
@@ -398,11 +543,11 @@ import manifest from '../data/raw-images-manifest.json';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
   }
 
   .card-image-wrap:hover img {
-    transform: scale(1.04);
+    transform: scale(1.02);
   }
 
   .zoom-indicator {
@@ -410,13 +555,13 @@ import manifest from '../data/raw-images-manifest.json';
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.45);
     color: #FFF;
-    font-size: 10px;
+    font-size: 9px;
     text-align: center;
-    padding: 4px 0;
+    padding: 3px 0;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.15s ease;
   }
 
   .card-image-wrap:hover .zoom-indicator {
@@ -424,87 +569,65 @@ import manifest from '../data/raw-images-manifest.json';
   }
 
   .card-content {
-    padding: 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     flex-grow: 1;
   }
 
   .card-filename {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
-    color: var(--text);
+    color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
+    padding-bottom: 6px;
   }
 
-  .checkbox-group {
+  .pills-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
   }
 
-  .checkbox-row {
+  .pills-group-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .pills-row {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 6px 8px;
-    border-radius: 4px;
-    transition: background 0.15s ease;
-    user-select: none;
+    flex-wrap: wrap;
+    gap: 4px;
   }
 
-  .checkbox-row:hover {
-    background: var(--surface);
-  }
-
-  .checkbox-row.checked {
-    background: var(--accent-lt);
-    color: #880000;
-    font-weight: 500;
-  }
-
-  .checkbox-row input[type="checkbox"] {
-    display: none; /* Hide native checkbox to render custom checkmark */
-  }
-
-  .checkmark-box {
-    width: 14px;
-    height: 14px;
-    border: 1.5px solid var(--muted);
-    border-radius: 3px;
-    display: inline-block;
-    position: relative;
+  .pill-btn {
     background: #FFF;
-    flex-shrink: 0;
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 20px;
     transition: all 0.15s ease;
+    font-family: var(--font-sans);
   }
 
-  .checkbox-row.checked .checkmark-box {
+  .pill-btn:hover {
     border-color: #880000;
+    color: #880000;
+  }
+
+  .pill-btn.active {
     background: #880000;
-  }
-
-  .checkbox-row.checked .checkmark-box::after {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 3px;
-    height: 7px;
-    border: solid #FFF;
-    border-width: 0 1.5px 1.5px 0;
-    transform: rotate(45deg);
-  }
-
-  .checkbox-label {
-    font-size: 11.5px;
-    line-height: 1.3;
+    border-color: #880000;
+    color: #FFF;
   }
 
   /* Sticky Footer */
@@ -516,8 +639,8 @@ import manifest from '../data/raw-images-manifest.json';
     background: rgba(255, 255, 255, 0.95);
     border-top: 1px solid var(--border);
     backdrop-filter: blur(10px);
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
-    padding: 16px 24px;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+    padding: 14px 20px;
     z-index: 999;
   }
 
@@ -527,35 +650,33 @@ import manifest from '../data/raw-images-manifest.json';
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
   }
 
   .summary-counters {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
   }
 
   .summary-title {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--text);
   }
 
   .counter-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
   }
 
   .counter-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--border);
   }
 
   .counter-dot.com { background-color: #ff5252; }
@@ -564,10 +685,10 @@ import manifest from '../data/raw-images-manifest.json';
   .counter-dot.emp { background-color: #e040fb; }
   .counter-dot.des { background-color: #69f0ae; }
   .counter-dot.val { background-color: #ffd740; }
-  .counter-dot.gou = { background-color: #b2ff59; }
+  .counter-dot.gou { background-color: #b2ff59; }
 
   .counter-label {
-    font-size: 11.5px;
+    font-size: 11px;
     color: var(--muted);
   }
 
@@ -576,27 +697,32 @@ import manifest from '../data/raw-images-manifest.json';
     font-weight: 600;
   }
 
-  .btn-download-json {
+  .btn-save-cloud {
     background: #880000;
     color: #FFF;
     border: none;
-    padding: 12px 24px;
-    font-size: 12px;
+    padding: 10px 20px;
+    font-size: 11.5px;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     cursor: pointer;
     border-radius: 4px;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: background 0.2s ease;
     white-space: nowrap;
     font-family: var(--font-sans);
   }
 
-  .btn-download-json:hover {
+  .btn-save-cloud:hover:not(:disabled) {
     background: #5f0000;
+  }
+
+  .btn-save-cloud:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   /* Zoom Modal */
@@ -610,7 +736,7 @@ import manifest from '../data/raw-images-manifest.json';
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: 24px;
   }
 
   .modal-backdrop {
@@ -619,7 +745,7 @@ import manifest from '../data/raw-images-manifest.json';
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.7);
   }
 
   .modal-content-wrap {
@@ -629,39 +755,25 @@ import manifest from '../data/raw-images-manifest.json';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     z-index: 10001;
   }
 
   .modal-content-wrap img {
     max-width: 100%;
     max-height: 80vh;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     border-radius: 4px;
-    object-fit: contain;
   }
 
   .close-modal-btn {
     background: #FFF;
     border: none;
-    padding: 8px 16px;
-    font-size: 12px;
+    padding: 6px 12px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     border-radius: 4px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .close-modal-btn:hover {
-    background: #eee;
-  }
-
-  .empty-msg {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    margin-top: 40px;
   }
 </style>

@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
-const selectionsPath = './fotos-seleccionadas.json';
+const API_URL = "https://keyvalue.immanuel.co/api/KeyVal";
+const APP_KEY = "ecmcx7yj";
+const ITEM_KEY = "selections";
+
+const manifestPath = './src/data/raw-images-manifest.json';
 const assetsDir = './src/assets';
 const homePath = './src/data/home.json';
 const trayectoriaPath = './src/data/trayectoria.json';
@@ -11,40 +15,87 @@ if (!fs.existsSync(assetsDir)) {
   fs.mkdirSync(assetsDir, { recursive: true });
 }
 
-// Check if selections file exists
-if (!fs.existsSync(selectionsPath)) {
-  console.error(`Error: No se encontró el archivo '${selectionsPath}' en la raíz del proyecto.`);
-  console.log('Por favor, descarga el archivo desde el organizador e introduce el archivo en la raíz.');
-  process.exit(1);
+function base64urlDecode(str) {
+  if (!str) return '';
+  let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (base64.length % 4) {
+    base64 += '=';
+  }
+  return Buffer.from(base64, 'base64').toString('utf-8');
 }
 
-try {
-  const selections = JSON.parse(fs.readFileSync(selectionsPath, 'utf-8'));
-  console.log('Cargando selección de imágenes...');
+async function run() {
+  console.log('Conectando con la nube de KeyValue...');
+  
+  let selections;
+  try {
+    const res = await fetch(`${API_URL}/GetValue/${APP_KEY}/${ITEM_KEY}`);
+    if (!res.ok) {
+      throw new Error(`HTTP error ${res.status}`);
+    }
+    
+    // KeyValue returns string with quotes from json endpoint
+    const encrypted = await res.json();
+    if (!encrypted || encrypted.trim() === "") {
+      console.error('Error: No se encontraron selecciones guardadas en la nube.');
+      process.exit(1);
+    }
 
-  // Helper to copy and rename files
-  const processSectionImages = (sectionKey, imageList) => {
-    if (!imageList || imageList.length === 0) {
+    const decrypted = base64urlDecode(encrypted);
+    selections = JSON.parse(decrypted);
+    console.log('✓ Selección descargada con éxito de la nube.');
+  } catch (error) {
+    console.error('Error al descargar la selección desde la nube:', error.message);
+    process.exit(1);
+  }
+
+  // Read manifest to map indices to paths
+  if (!fs.existsSync(manifestPath)) {
+    console.error(`Error: No se encontró el manifiesto de imágenes: ${manifestPath}`);
+    process.exit(1);
+  }
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+
+  // Mapping from frontend section key to manifest folder path
+  const keyToManifestPath = {
+    comunicacion_eventos: ['trabaja_conmigo', 'comunicacion_eventos'],
+    catas_maridajes: ['trabaja_conmigo', 'catas_maridajes'],
+    podcast: ['trabaja_conmigo', 'podcast'],
+    mi_empresa: ['trayectoria', 'mi_empresa'],
+    descorchados: ['trayectoria', 'descorchados'],
+    vina_valdivieso: ['trayectoria', 'vina_valdivieso'],
+    revista_gourmand: ['trayectoria', 'revista_gourmand']
+  };
+
+  // Helper to copy and rename files using manifest indices
+  const processSectionImages = (sectionKey, indexList) => {
+    if (!indexList || indexList.length === 0) {
       console.log(`- Sección [${sectionKey}]: Sin imágenes seleccionadas.`);
       return [];
     }
 
-    return imageList.map((item, index) => {
-      // Resolve string paths (e.g. "/raw-images/...")
-      const src = typeof item === 'string' ? item : item.src;
-      const position = typeof item === 'string' ? 'center' : (item.position || 'center');
+    const [group, key] = keyToManifestPath[sectionKey];
+    const sectionFiles = manifest[group][key] || [];
 
+    return indexList.map((idx, listIndex) => {
+      const src = sectionFiles[idx];
+      if (!src) {
+        console.warn(`  Advertencia: Índice [${idx}] fuera de rango en el manifiesto para ${sectionKey}`);
+        return null;
+      }
+
+      // Remove leading slash for local fs operations
       const sourceRelative = src.startsWith('/') ? src.slice(1) : src;
       const sourcePath = path.join('./public', sourceRelative);
 
       if (!fs.existsSync(sourcePath)) {
         console.warn(`  Advertencia: No se encontró el archivo origen: ${sourcePath}`);
-        return { src, position }; // Fallback
+        return { src, position: 'center' };
       }
 
       // Generate normalized name: src/assets/sectionKey_index.ext
       const ext = path.extname(sourcePath).toLowerCase();
-      const targetName = `${sectionKey}_${index + 1}${ext}`;
+      const targetName = `${sectionKey}_${listIndex + 1}${ext}`;
       const targetPath = path.join(assetsDir, targetName);
 
       // Copy file
@@ -54,9 +105,9 @@ try {
       // Return configuration object for Astro
       return {
         src: `/src/assets/${targetName}`,
-        position: position
+        position: 'center' // Default crop position
       };
-    });
+    }).filter(Boolean);
   };
 
   // 1. Process Home (Trabaja conmigo) Sections
@@ -73,7 +124,7 @@ try {
   }
 
   fs.writeFileSync(homePath, JSON.stringify(homeData, null, 2), 'utf-8');
-  console.log('✓ Archivo home.json actualizado correctamente.');
+  console.log('✓ Archivo home.json actualizado.');
 
   // 2. Process Trayectoria Sections
   const trayectoriaData = JSON.parse(fs.readFileSync(trayectoriaPath, 'utf-8'));
@@ -92,14 +143,9 @@ try {
   }
 
   fs.writeFileSync(trayectoriaPath, JSON.stringify(trayectoriaData, null, 2), 'utf-8');
-  console.log('✓ Archivo trayectoria.json actualizado correctamente.');
+  console.log('✓ Archivo trayectoria.json actualizado.');
 
-  // Clean up selection file
-  fs.unlinkSync(selectionsPath);
-  console.log(`✓ Archivo temporal '${selectionsPath}' eliminado de la raíz.`);
-  console.log('\n¡Proceso completado con éxito! Las imágenes están listas en src/assets/ y configuradas.');
-
-} catch (error) {
-  console.error('Ocurrió un error procesando el archivo JSON:', error);
-  process.exit(1);
+  console.log('\n¡Proceso completado con éxito! Las imágenes están listas en src/assets/ y aplicadas.');
 }
+
+run();
