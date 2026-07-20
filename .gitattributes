@@ -1,0 +1,20 @@
+# Normaliza los finales de linea en todo el repo.
+# Evita que editar desde Windows genere diffs falsos de miles de lineas.
+* text=auto eol=lf
+
+# Binarios: git no debe tocarlos nunca
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.JPG   binary
+*.JPEG  binary
+*.PNG   binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary

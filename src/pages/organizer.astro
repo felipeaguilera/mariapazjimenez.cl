@@ -8,7 +8,7 @@ import manifest from '../data/raw-images-manifest.json';
     <header class="organizer-header">
       <h1 class="organizer-title">Selección y Categorización de Fotos</h1>
       <p class="organizer-subtitle">
-        Navega por las fotos. Haz clic en los botones de sección debajo de cada imagen para asignarla. Los cambios se guardan automáticamente en tu navegador y puedes subirlos a la nube con el botón flotante inferior.
+        Navega por las fotos. Haz clic en los botones de sección debajo de cada imagen para asignarla. Todo se guarda solo: no necesitas hacer nada más. Puedes cerrar la página y seguir después.
       </p>
     </header>
 
@@ -67,6 +67,11 @@ import manifest from '../data/raw-images-manifest.json';
             <span class="counter-label">Gourmand: <strong id="count-gou">0</strong></span>
           </div>
         </div>
+
+        <button id="download-backup-btn" class="btn-backup" title="Descarga una copia de respaldo de tu seleccion">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar respaldo
+        </button>
 
         <button id="save-cloud-btn" class="btn-save-cloud">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -155,6 +160,7 @@ import manifest from '../data/raw-images-manifest.json';
   const filterButtons = document.querySelectorAll('.filter-btn');
   const saveCloudBtn = document.getElementById('save-cloud-btn');
   const syncCloudBtn = document.getElementById('sync-cloud-btn');
+  const downloadBackupBtn = document.getElementById('download-backup-btn');
   const cloudStatusText = document.getElementById('cloud-status-text');
 
   const counters = {
@@ -176,6 +182,58 @@ import manifest from '../data/raw-images-manifest.json';
     });
   });
 
+  // ---- Helpers de respaldo y autoguardado ----
+
+  const LOCAL_KEY = 'mpj-cloud-selections';
+
+  // Cuenta el total de asignaciones (para comparar local vs nube)
+  function countSelections(obj) {
+    if (!obj) return 0;
+    return Object.keys(obj).reduce(
+      (sum, k) => sum + (Array.isArray(obj[k]) ? obj[k].length : 0),
+      0
+    );
+  }
+
+  function readLocal() {
+    try {
+      const saved = localStorage.getItem(LOCAL_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeLocal(obj) {
+    try {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(obj));
+    } catch (e) { /* cuota llena, se ignora */ }
+  }
+
+  // Autoguardado en la nube con retardo (debounce)
+  let autoSaveTimer = null;
+  let pendingChanges = false;
+
+  function scheduleAutoSave() {
+    pendingChanges = true;
+    writeLocal(selections); // respaldo local inmediato
+    cloudStatusText.textContent = "Cambios sin guardar...";
+    cloudStatusText.className = "status-indicator info";
+
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+      saveToCloud(true);
+    }, 2000);
+  }
+
+  // Avisa si se cierra la pestaña con cambios aun sin subir
+  window.addEventListener('beforeunload', (e) => {
+    if (pendingChanges) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
   // Load selections from cloud
   async function loadFromCloud() {
     cloudStatusText.textContent = "Cargando selección guardada desde la nube...";
@@ -189,13 +247,32 @@ import manifest from '../data/raw-images-manifest.json';
           const decrypted = base64urlDecode(encrypted);
           const parsed = JSON.parse(decrypted);
           
-          // Apply selections
+          // NO sobrescribir a ciegas: comparar con el respaldo local.
+          // Si el borrador local tiene mas trabajo que la nube, se conserva
+          // el local y se sube, para no perder una sesion sin guardar.
+          const local = readLocal();
+          const cloudCount = countSelections(parsed);
+          const localCount = countSelections(local);
+
+          if (local && localCount > cloudCount) {
+            Object.keys(selections).forEach(key => {
+              selections[key] = Array.isArray(local[key]) ? local[key] : [];
+            });
+            cloudStatusText.textContent =
+              `Se recuperaron ${localCount} asignaciones de tu ultima sesion. Subiendo a la nube...`;
+            cloudStatusText.className = "status-indicator info";
+            renderGallery();
+            updateCounters();
+            await saveToCloud(true);
+            return;
+          }
+
           Object.keys(selections).forEach(key => {
             selections[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
           });
-          
-          localStorage.setItem('mpj-cloud-selections', JSON.stringify(selections));
-          cloudStatusText.textContent = "Selección sincronizada con la nube.";
+
+          writeLocal(selections);
+          cloudStatusText.textContent = `Sincronizado. ${cloudCount} fotos asignadas. Los cambios se guardan solos.`;
           cloudStatusText.className = "status-indicator success";
         } else {
           cloudStatusText.textContent = "Sin selección previa en la nube. ¡Empieza a elegir!";
@@ -208,10 +285,14 @@ import manifest from '../data/raw-images-manifest.json';
       cloudStatusText.textContent = "Error al conectar con la nube. Cargando datos locales...";
       cloudStatusText.className = "status-indicator error";
       
-      // Fallback to local storage
-      const saved = localStorage.getItem('mpj-cloud-selections');
+      // Fallback: recuperar el borrador local
+      const saved = readLocal();
       if (saved) {
-        selections = JSON.parse(saved);
+        Object.keys(selections).forEach(key => {
+          selections[key] = Array.isArray(saved[key]) ? saved[key] : [];
+        });
+        cloudStatusText.textContent =
+          "Sin conexion. Trabajando con tu borrador local; se subira al reconectar.";
       }
     }
 
@@ -219,11 +300,15 @@ import manifest from '../data/raw-images-manifest.json';
     updateCounters();
   }
 
-  // Save selections to cloud
-  async function saveToCloud() {
-    saveCloudBtn.disabled = true;
-    saveCloudBtn.textContent = "Guardando...";
-    cloudStatusText.textContent = "Guardando selección en el servidor...";
+  // Save selections to cloud. silent=true lo usa el autoguardado.
+  async function saveToCloud(silent = false) {
+    if (autoSaveTimer) { clearTimeout(autoSaveTimer); autoSaveTimer = null; }
+
+    if (!silent) {
+      saveCloudBtn.disabled = true;
+      saveCloudBtn.textContent = "Guardando...";
+    }
+    cloudStatusText.textContent = silent ? "Guardando automaticamente..." : "Guardando seleccion en el servidor...";
     cloudStatusText.className = "status-indicator loading";
 
     const dataString = JSON.stringify(selections);
@@ -236,8 +321,11 @@ import manifest from '../data/raw-images-manifest.json';
       if (res.ok) {
         const val = await res.json();
         if (val === true || val === "True") {
-          localStorage.setItem('mpj-cloud-selections', dataString);
-          cloudStatusText.textContent = "¡Selección guardada en la nube con éxito!";
+          writeLocal(selections);
+          pendingChanges = false;
+          const total = countSelections(selections);
+          const hora = new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+          cloudStatusText.textContent = `Guardado ${hora}. ${total} fotos asignadas.`;
           cloudStatusText.className = "status-indicator success";
         } else {
           throw new Error();
@@ -246,11 +334,18 @@ import manifest from '../data/raw-images-manifest.json';
         throw new Error();
       }
     } catch (e) {
-      cloudStatusText.textContent = "Error de conexión: No se pudo guardar en la nube.";
+      cloudStatusText.textContent =
+        "Sin conexion. Tu seleccion esta guardada en este equipo; se reintentara sola.";
       cloudStatusText.className = "status-indicator error";
-      alert("Hubo un error al guardar en la nube. Inténtalo de nuevo.");
+      // El trabajo sigue a salvo en localStorage. Reintento silencioso.
+      if (autoSaveTimer) clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => saveToCloud(true), 15000);
+      if (!silent) {
+        alert("No se pudo guardar en la nube ahora. Tu seleccion quedo guardada en este equipo y se reintentara automaticamente.");
+      }
     }
 
+    if (silent) return;
     saveCloudBtn.disabled = false;
     saveCloudBtn.innerHTML = `
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -348,9 +443,9 @@ import manifest from '../data/raw-images-manifest.json';
           }
 
           updateCounters();
-          
-          // Auto-save local draft
-          localStorage.setItem('mpj-cloud-selections', JSON.stringify(selections));
+
+          // Respaldo local inmediato + autoguardado en la nube (debounce 2s)
+          scheduleAutoSave();
         });
       });
 
@@ -390,9 +485,28 @@ import manifest from '../data/raw-images-manifest.json';
     document.body.appendChild(modal);
   }
 
+  // Descarga un respaldo local de la seleccion (por si la nube falla)
+  function downloadBackup() {
+    const payload = {
+      guardado: new Date().toISOString(),
+      total: countSelections(selections),
+      selecciones: selections
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mpj-seleccion-fotos-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   // Bind save/sync buttons
-  saveCloudBtn.addEventListener('click', saveToCloud);
+  saveCloudBtn.addEventListener('click', () => saveToCloud(false));
   syncCloudBtn.addEventListener('click', loadFromCloud);
+  downloadBackupBtn.addEventListener('click', downloadBackup);
 
   // Initialize
   loadFromCloud();
@@ -776,5 +890,26 @@ import manifest from '../data/raw-images-manifest.json';
     cursor: pointer;
     border-radius: 4px;
     text-transform: uppercase;
+  }
+
+  .btn-backup {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--text, #333);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    margin-right: 10px;
+  }
+
+  .btn-backup:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.4);
   }
 </style>
