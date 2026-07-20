@@ -3,93 +3,96 @@ import Base from '../layouts/Base.astro';
 import manifest from '../data/raw-images-manifest.json';
 ---
 
-<Base title="Organizador de Fotos — María Paz Jiménez">
+<Base title="Selección de Fotos — María Paz Jiménez">
   <div class="organizer-container">
     <header class="organizer-header">
-      <h1 class="organizer-title">Organizador de Fotografías</h1>
+      <h1 class="organizer-title">Selección y Categorización de Fotos</h1>
       <p class="organizer-subtitle">
-        Selecciona las fotos para cada sección, ordénalas y ajusta el encuadre vertical de forma interactiva. Al finalizar, descarga la configuración.
+        Navega por las fotos disponibles. Para cada foto que desees usar en la web, marca la casilla o casillas de las secciones donde debería aparecer. Al finalizar, descarga el archivo de configuración al final de la página.
       </p>
     </header>
 
-    <div class="organizer-layout">
-      <!-- Sidebar Sections Nav -->
-      <aside class="sections-sidebar">
-        <h2 class="sidebar-title">Secciones</h2>
-        <div class="sidebar-nav">
-          <div class="nav-group">
-            <span class="group-label">Inicio (Trabaja conmigo)</span>
-            <button class="nav-btn active" data-section="comunicacion_eventos">Comunicación & Eventos</button>
-            <button class="nav-btn" data-section="catas_maridajes">Catas & Maridajes</button>
-            <button class="nav-btn" data-section="podcast">Podcast Vinos con Marypepa</button>
-          </div>
-          <div class="nav-group">
-            <span class="group-label">Trayectoria</span>
-            <button class="nav-btn" data-section="mi_empresa">Mi Empresa (2007-Act)</button>
-            <button class="nav-btn" data-section="descorchados">Descorchados (2009-2026)</button>
-            <button class="nav-btn" data-section="vina_valdivieso">Viña Valdivieso (2002-2006)</button>
-            <button class="nav-btn" data-section="revista_gourmand">Revista Gourmand (1999-2002)</button>
-          </div>
-        </div>
-
-        <div class="sidebar-actions">
-          <button id="download-json-btn" class="btn-primary-download">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Descargar Configuración
-          </button>
-        </div>
-      </aside>
-
-      <!-- Main Panel -->
-      <main class="organizer-main">
-        <!-- Gallery Grid -->
-        <section class="gallery-column">
-          <div class="column-header">
-            <h2>Galería Disponible</h2>
-            <span class="count-badge" id="available-count">0 fotos</span>
-          </div>
-          <div class="grid-scroll">
-            <div class="image-grid" id="available-grid"></div>
-          </div>
-        </section>
-
-        <!-- Selection & Ordering Panel -->
-        <section class="selection-column">
-          <div class="column-header">
-            <h2>Fotos Seleccionadas (Orden y Encuadre 2:3)</h2>
-            <span class="count-badge" id="selected-count">0 seleccionadas</span>
-          </div>
-          <div class="grid-scroll">
-            <div class="selected-list" id="selected-list"></div>
-          </div>
-        </section>
-      </div>
+    <!-- Filters Section -->
+    <div class="filters-row">
+      <button class="filter-btn active" data-filter="all">Todas las fotos</button>
+      <button class="filter-btn" data-filter="trabaja_conmigo">Carpeta: Trabaja Conmigo</button>
+      <button class="filter-btn" data-filter="trayectoria">Carpeta: Trayectoria</button>
     </div>
+
+    <!-- Gallery Grid -->
+    <main class="gallery-container">
+      <div class="photos-grid" id="photos-grid"></div>
+    </main>
+
+    <!-- Sticky Bottom Bar -->
+    <footer class="sticky-footer">
+      <div class="footer-content">
+        <div class="summary-counters">
+          <span class="summary-title">Seleccionadas:</span>
+          <div class="counter-item">
+            <span class="counter-dot com"></span>
+            <span class="counter-label">Com. & Eventos: <strong id="count-com">0</strong></span>
+          </div>
+          <div class="counter-item">
+            <span class="counter-dot cat"></span>
+            <span class="counter-label">Catas & Maridajes: <strong id="count-cat">0</strong></span>
+          </div>
+          <div class="counter-item">
+            <span class="counter-dot pod"></span>
+            <span class="counter-label">Podcast: <strong id="count-pod">0</strong></span>
+          </div>
+          <div class="counter-item">
+            <span class="counter-dot emp"></span>
+            <span class="counter-label">Mi Empresa: <strong id="count-emp">0</strong></span>
+          </div>
+          <div class="counter-item">
+            <span class="counter-dot des"></span>
+            <span class="counter-label">Descorchados: <strong id="count-des">0</strong></span>
+          </div>
+          <div class="counter-item">
+            <span class="counter-dot val"></span>
+            <span class="counter-label">V. Valdivieso: <strong id="count-val">0</strong></span>
+          </div>
+          <div class="counter-item">
+            <span class="counter-dot gou"></span>
+            <span class="counter-label">R. Gourmand: <strong id="count-gou">0</strong></span>
+          </div>
+        </div>
+
+        <button id="download-json-btn" class="btn-download-json">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar Selección (JSON)
+        </button>
+      </div>
+    </footer>
   </div>
 </Base>
 
-<!-- Pass raw manifest to client script -->
+<!-- Pass manifest to client script -->
 <script is:inline id="manifest-data" type="application/json" set:html={JSON.stringify(manifest)}></script>
 
 <script>
-  // Parse manifest from HTML
+  // Parse manifest
   const manifest = JSON.parse(document.getElementById('manifest-data').textContent);
 
-  // Map backend key to frontend sections
-  const keyToGroup = {
-    comunicacion_eventos: ['trabaja_conmigo', 'comunicacion_eventos'],
-    catas_maridajes: ['trabaja_conmigo', 'catas_maridajes'],
-    podcast: ['trabaja_conmigo', 'podcast'],
-    mi_empresa: ['trayectoria', 'mi_empresa'],
-    descorchados: ['trayectoria', 'descorchados'],
-    vina_valdivieso: ['trayectoria', 'vina_valdivieso'],
-    revista_gourmand: ['trayectoria', 'revista_gourmand']
-  };
-
-  // State
-  let activeSection = 'comunicacion_eventos';
+  // Flatten all files from manifest for easier rendering
+  const allFiles = [];
   
-  // Selections state format: { [sectionKey]: [{ src: string, position: string }, ...] }
+  // Trabaja Conmigo files
+  Object.keys(manifest.trabaja_conmigo).forEach(subKey => {
+    manifest.trabaja_conmigo[subKey].forEach(src => {
+      allFiles.push({ src, folder: 'trabaja_conmigo', subFolder: subKey });
+    });
+  });
+
+  // Trayectoria files
+  Object.keys(manifest.trayectoria).forEach(subKey => {
+    manifest.trayectoria[subKey].forEach(src => {
+      allFiles.push({ src, folder: 'trayectoria', subFolder: subKey });
+    });
+  });
+
+  // Selections state: { [sectionKey]: string[] } (list of image paths)
   let selections = {
     comunicacion_eventos: [],
     catas_maridajes: [],
@@ -100,179 +103,186 @@ import manifest from '../data/raw-images-manifest.json';
     revista_gourmand: []
   };
 
-  // Try to load pre-existing state from localStorage
-  const savedState = localStorage.getItem('mpj-image-selections');
+  // Sections definitions for rendering checkboxes
+  const sections = [
+    { key: 'comunicacion_eventos', label: 'Comunicación & Eventos (Inicio)', group: 'Inicio' },
+    { key: 'catas_maridajes', label: 'Catas & Maridajes (Inicio)', group: 'Inicio' },
+    { key: 'podcast', label: 'Podcast Vinos con Marypepa (Inicio)', group: 'Inicio' },
+    { key: 'mi_empresa', label: 'Mi Empresa 2007-Act (Trayectoria)', group: 'Trayectoria' },
+    { key: 'descorchados', label: 'Descorchados 2009-2026 (Trayectoria)', group: 'Trayectoria' },
+    { key: 'vina_valdivieso', label: 'Viña Valdivieso 2002-2006 (Trayectoria)', group: 'Trayectoria' },
+    { key: 'revista_gourmand', label: 'Revista Gourmand 1999-2002 (Trayectoria)', group: 'Trayectoria' }
+  ];
+
+  // Try to load pre-existing state
+  const savedState = localStorage.getItem('mpj-simple-selections');
   if (savedState) {
     try {
       selections = { ...selections, ...JSON.parse(savedState) };
     } catch (e) {
-      console.error('Error parsing saved state', e);
+      console.error('Error loading saved state', e);
     }
   }
 
   // DOM Elements
-  const navButtons = document.querySelectorAll('.nav-btn');
-  const availableGrid = document.getElementById('available-grid');
-  const selectedList = document.getElementById('selected-list');
-  const availableCount = document.getElementById('available-count');
-  const selectedCount = document.getElementById('selected-count');
+  const photosGrid = document.getElementById('photos-grid');
+  const filterButtons = document.querySelectorAll('.filter-btn');
   const downloadBtn = document.getElementById('download-json-btn');
+  
+  // Counters DOM elements
+  const counts = {
+    comunicacion_eventos: document.getElementById('count-com'),
+    catas_maridajes: document.getElementById('count-cat'),
+    podcast: document.getElementById('count-pod'),
+    mi_empresa: document.getElementById('count-emp'),
+    descorchados: document.getElementById('count-des'),
+    vina_valdivieso: document.getElementById('count-val'),
+    revista_gourmand: document.getElementById('count-gou')
+  };
+
+  // State
+  let currentFilter = 'all';
 
   // Init
-  switchSection(activeSection);
+  renderGallery();
+  updateCounters();
 
-  // Switch Sections
-  navButtons.forEach(btn => {
+  // Filters Event
+  filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      navButtons.forEach(b => b.classList.remove('active'));
+      filterButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeSection = btn.dataset.section;
-      switchSection(activeSection);
+      currentFilter = btn.dataset.filter;
+      renderGallery();
     });
   });
 
-  function switchSection(sectionKey) {
-    const [group, key] = keyToGroup[sectionKey];
-    const allFiles = manifest[group][key] || [];
+  // Render Gallery function
+  function renderGallery() {
+    photosGrid.innerHTML = '';
+    
+    const filteredFiles = allFiles.filter(item => {
+      if (currentFilter === 'all') return true;
+      return item.folder === currentFilter;
+    });
 
-    // Render counts
-    availableCount.textContent = `${allFiles.length} fotos`;
-    selectedCount.textContent = `${selections[sectionKey].length} seleccionadas`;
-
-    // Render Available Grid
-    availableGrid.innerHTML = '';
-    if (allFiles.length === 0) {
-      availableGrid.innerHTML = '<p class="empty-message">Esta carpeta está vacía.</p>';
-    } else {
-      allFiles.forEach(src => {
-        const isSelected = selections[sectionKey].some(item => item.src === src);
-        const card = document.createElement('div');
-        card.className = `photo-card ${isSelected ? 'selected' : ''}`;
-        
-        const fileName = src.split('/').pop();
-        card.innerHTML = `
-          <div class="card-thumb">
-            <img src="${src}" alt="" loading="lazy" />
-          </div>
-          <div class="card-meta">
-            <span class="file-name" title="${fileName}">${fileName}</span>
-            <button class="select-btn">${isSelected ? 'Deseleccionar' : 'Seleccionar'}</button>
-          </div>
-        `;
-
-        card.querySelector('.select-btn').addEventListener('click', () => {
-          toggleSelection(sectionKey, src);
-        });
-
-        availableGrid.appendChild(card);
-      });
-    }
-
-    // Render Selected List
-    renderSelectedList(sectionKey);
-  }
-
-  function renderSelectedList(sectionKey) {
-    selectedList.innerHTML = '';
-    const currentSelections = selections[sectionKey];
-
-    if (currentSelections.length === 0) {
-      selectedList.innerHTML = '<p class="empty-message">No has seleccionado fotos para esta sección aún. Elige fotos del panel izquierdo.</p>';
+    if (filteredFiles.length === 0) {
+      photosGrid.innerHTML = '<p class="empty-msg">No se encontraron fotos en esta categoría.</p>';
       return;
     }
 
-    currentSelections.forEach((item, index) => {
+    filteredFiles.forEach(item => {
       const card = document.createElement('div');
-      card.className = 'selected-item-row';
+      card.className = 'photo-card';
+
+      // Check which sections have this photo selected
+      const isAnySelected = Object.keys(selections).some(sectionKey => 
+        selections[sectionKey].includes(item.src)
+      );
+
+      if (isAnySelected) {
+        card.classList.add('has-selections');
+      }
+
       const fileName = item.src.split('/').pop();
 
-      card.innerHTML = `
-        <div class="item-drag-controls">
-          <button class="order-btn up-btn" ${index === 0 ? 'disabled' : ''}>▲</button>
-          <span class="order-number">${index + 1}</span>
-          <button class="order-btn down-btn" ${index === currentSelections.length - 1 ? 'disabled' : ''}>▼</button>
-        </div>
-        
-        <div class="item-preview-frame">
-          <img src="${item.src}" alt="" style="object-position: ${item.position}" />
-          <span class="preview-badge">Vista 2:3</span>
-        </div>
+      // Render Checkboxes
+      let checkboxesHTML = '';
+      sections.forEach(sec => {
+        const isChecked = selections[sec.key].includes(item.src);
+        checkboxesHTML += `
+          <label class="checkbox-row ${isChecked ? 'checked' : ''}">
+            <input type="checkbox" data-src="${item.src}" data-section="${sec.key}" ${isChecked ? 'checked' : ''} />
+            <span class="checkmark-box"></span>
+            <span class="checkbox-label">${sec.label}</span>
+          </label>
+        `;
+      });
 
-        <div class="item-settings">
-          <span class="item-name" title="${fileName}">${fileName}</span>
-          <div class="setting-row">
-            <label>Alineación vertical:</label>
-            <select class="position-select">
-              <option value="center" ${item.position === 'center' ? 'selected' : ''}>Centro</option>
-              <option value="top" ${item.position === 'top' ? 'selected' : ''}>Arriba (cabeza)</option>
-              <option value="bottom" ${item.position === 'bottom' ? 'selected' : ''}>Abajo (pies)</option>
-            </select>
+      card.innerHTML = `
+        <div class="card-image-wrap">
+          <img src="${item.src}" alt="" loading="lazy" />
+          <span class="zoom-indicator">Hacer clic para ampliar</span>
+        </div>
+        <div class="card-content">
+          <div class="card-filename" title="${fileName}">${fileName}</div>
+          <div class="checkbox-group">
+            ${checkboxesHTML}
           </div>
         </div>
-
-        <button class="remove-item-btn" title="Quitar">×</button>
       `;
 
-      // Event handlers
-      card.querySelector('.position-select').addEventListener('change', (e) => {
-        updateItemPosition(sectionKey, index, e.target.value);
+      // Checkbox Change Event Handlers
+      card.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const target = e.target;
+          const src = target.dataset.src;
+          const section = target.dataset.section;
+          
+          if (target.checked) {
+            if (!selections[section].includes(src)) {
+              selections[section].push(src);
+            }
+            target.closest('.checkbox-row').classList.add('checked');
+          } else {
+            selections[section] = selections[section].filter(path => path !== src);
+            target.closest('.checkbox-row').classList.remove('checked');
+          }
+
+          // Update card visual state (glow border if has any selections)
+          const hasAny = Object.keys(selections).some(key => selections[key].includes(src));
+          if (hasAny) {
+            card.classList.add('has-selections');
+          } else {
+            card.classList.remove('has-selections');
+          }
+
+          saveState();
+          updateCounters();
+        });
       });
 
-      card.querySelector('.up-btn').addEventListener('click', () => {
-        moveItem(sectionKey, index, -1);
+      // Simple Click to Zoom
+      card.querySelector('.card-image-wrap').addEventListener('click', () => {
+        openModal(item.src);
       });
 
-      card.querySelector('.down-btn').addEventListener('click', () => {
-        moveItem(sectionKey, index, 1);
-      });
-
-      card.querySelector('.remove-item-btn').addEventListener('click', () => {
-        toggleSelection(sectionKey, item.src);
-      });
-
-      selectedList.appendChild(card);
+      photosGrid.appendChild(card);
     });
   }
 
-  function toggleSelection(sectionKey, src) {
-    const existsIndex = selections[sectionKey].findIndex(item => item.src === src);
-    if (existsIndex > -1) {
-      selections[sectionKey].splice(existsIndex, 1);
-    } else {
-      selections[sectionKey].push({ src, position: 'center' });
-    }
-    saveState();
-    switchSection(sectionKey);
-  }
-
-  function updateItemPosition(sectionKey, index, position) {
-    selections[sectionKey][index].position = position;
-    saveState();
-    // Update live preview element style directly without full re-render to keep select focus
-    const previews = selectedList.querySelectorAll('.item-preview-frame img');
-    if (previews[index]) {
-      previews[index].style.objectPosition = position;
-    }
-  }
-
-  function moveItem(sectionKey, index, direction) {
-    const targetIdx = index + direction;
-    if (targetIdx < 0 || targetIdx >= selections[sectionKey].length) return;
-    
-    // Swap
-    const temp = selections[sectionKey][index];
-    selections[sectionKey][index] = selections[sectionKey][targetIdx];
-    selections[sectionKey][targetIdx] = temp;
-
-    saveState();
-    switchSection(sectionKey);
+  function updateCounters() {
+    Object.keys(selections).forEach(key => {
+      if (counts[key]) {
+        counts[key].textContent = selections[key].length;
+      }
+    });
   }
 
   function saveState() {
-    localStorage.setItem('mpj-image-selections', JSON.stringify(selections));
+    localStorage.setItem('mpj-simple-selections', JSON.stringify(selections));
   }
 
-  // Handle JSON download
+  // Zoom Modal
+  function openModal(src) {
+    const modal = document.createElement('div');
+    modal.className = 'zoom-modal';
+    modal.innerHTML = `
+      <div class="modal-backdrop"></div>
+      <div class="modal-content-wrap">
+        <img src="${src}" alt="" />
+        <button class="close-modal-btn">Cerrar</button>
+      </div>
+    `;
+
+    const closeModal = () => modal.remove();
+    modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+    modal.querySelector('.close-modal-btn').addEventListener('click', closeModal);
+    
+    document.body.appendChild(modal);
+  }
+
+  // Handle Download JSON
   downloadBtn.addEventListener('click', () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(selections, null, 2));
     const downloadAnchor = document.createElement('a');
@@ -286,410 +296,372 @@ import manifest from '../data/raw-images-manifest.json';
 
 <style>
   .organizer-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 40px 24px 140px 24px; /* padding-bottom accounts for the sticky bar */
     font-family: var(--font-sans);
     color: var(--text);
   }
 
   .organizer-header {
-    margin-bottom: 32px;
     text-align: center;
+    margin-bottom: 32px;
     border-bottom: 1px solid var(--border);
     padding-bottom: 24px;
   }
 
   .organizer-title {
     font-size: 32px;
-    font-weight: 600;
-    margin-bottom: 8px;
     color: #880000;
     font-family: var(--font-serif);
     font-style: italic;
+    margin-bottom: 12px;
   }
 
   .organizer-subtitle {
     font-size: 14px;
     color: var(--muted);
-    max-width: 680px;
+    max-width: 700px;
     margin: 0 auto;
     line-height: 1.6;
   }
 
-  .organizer-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr 1fr;
-    gap: 24px;
-    height: 70vh;
-    min-height: 550px;
-  }
-
-  /* Sidebar */
-  .sections-sidebar {
-    background: #FFF;
-    border: 1px solid var(--border);
-    padding: 20px;
+  /* Filters */
+  .filters-row {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  }
-
-  .sidebar-title {
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    margin-bottom: 16px;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 8px;
-  }
-
-  .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    overflow-y: auto;
-    flex-grow: 1;
-    margin-bottom: 20px;
-  }
-
-  .nav-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .group-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #880000;
-    margin-bottom: 6px;
-    opacity: 0.85;
-  }
-
-  .nav-btn {
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 10px 12px;
-    font-size: 13px;
-    color: var(--text);
-    cursor: pointer;
-    border-left: 2px solid transparent;
-    transition: all 0.2s ease;
-    font-family: var(--font-sans);
-  }
-
-  .nav-btn:hover {
-    background: var(--surface);
-    color: #880000;
-  }
-
-  .nav-btn.active {
-    background: var(--accent-lt);
-    border-left-color: #880000;
-    color: #880000;
-    font-weight: 500;
-  }
-
-  .sidebar-actions {
-    border-top: 1px solid var(--border);
-    padding-top: 16px;
-  }
-
-  .btn-primary-download {
-    width: 100%;
-    background: #880000;
-    color: var(--white);
-    border: none;
-    padding: 14px;
-    font-size: 13px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: background 0.2s ease;
+    gap: 12px;
+    margin-bottom: 32px;
   }
 
-  .btn-primary-download:hover {
-    background: #5f0000;
-  }
-
-  /* Columns */
-  .gallery-column,
-  .selection-column {
+  .filter-btn {
     background: #FFF;
     border: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  }
-
-  .column-header {
-    background: var(--surface);
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .column-header h2 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
     font-family: var(--font-sans);
   }
 
-  .count-badge {
-    background: rgba(136, 0, 0, 0.1);
+  .filter-btn:hover {
+    border-color: #880000;
     color: #880000;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 500;
   }
 
-  .grid-scroll {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
+  .filter-btn.active {
+    background: var(--accent-lt);
+    border-color: #880000;
+    color: #880000;
   }
 
-  /* Available Grid */
-  .image-grid {
+  /* Grid */
+  .photos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
   }
 
   .photo-card {
+    background: #FFF;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 6px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: var(--bg);
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transition: all 0.25s ease;
   }
 
   .photo-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    border-color: #880000;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   }
 
-  .photo-card.selected {
+  .photo-card.has-selections {
     border-color: #880000;
-    background: var(--accent-lt);
+    box-shadow: 0 4px 16px rgba(136, 0, 0, 0.08);
   }
 
-  .card-thumb {
-    aspect-ratio: 2 / 3; /* Render 2:3 vertical thumbnails */
-    background: var(--surface);
-    overflow: hidden;
+  .card-image-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Thumbnail horizontal style */
     position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    cursor: pointer;
   }
 
-  .card-thumb img {
+  .card-image-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    transition: transform 0.3s ease;
   }
 
-  .card-meta {
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  .card-image-wrap:hover img {
+    transform: scale(1.04);
   }
 
-  .file-name {
-    font-size: 11px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    color: var(--muted);
-  }
-
-  .select-btn {
-    border: 1px solid var(--border);
-    background: #FFF;
-    padding: 6px;
+  .zoom-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.5);
+    color: #FFF;
     font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    text-align: center;
+    padding: 4px 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
 
-  .photo-card.selected .select-btn {
-    background: #880000;
-    color: #FFF;
-    border-color: #880000;
+  .card-image-wrap:hover .zoom-indicator {
+    opacity: 1;
   }
 
-  .select-btn:hover {
-    border-color: #880000;
-    color: #880000;
-  }
-
-  .photo-card.selected .select-btn:hover {
-    background: #5f0000;
-    color: #FFF;
-  }
-
-  /* Selected List (Right Column) */
-  .selected-list {
+  .card-content {
+    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-  }
-
-  .selected-item-row {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--border);
-    background: #FFF;
-    padding: 10px;
-    border-radius: 4px;
-    gap: 16px;
-    position: relative;
-  }
-
-  .item-drag-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .order-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 4px;
-    font-size: 10px;
-  }
-
-  .order-btn:hover:not(:disabled) {
-    color: #880000;
-  }
-
-  .order-btn:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
-  }
-
-  .order-number {
-    font-size: 12px;
-    font-weight: 600;
-    color: #880000;
-  }
-
-  .item-preview-frame {
-    width: 60px;
-    aspect-ratio: 2 / 3; /* Strict 2:3 vertical frame for live preview */
-    border: 1px solid var(--border);
-    overflow: hidden;
-    position: relative;
-    background: var(--surface);
-  }
-
-  .item-preview-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: object-position 0.15s ease;
-  }
-
-  .preview-badge {
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 8px;
-    background: rgba(0,0,0,0.65);
-    color: #FFF;
-    padding: 1px 4px;
-    border-radius: 3px;
-    white-space: nowrap;
-  }
-
-  .item-settings {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
   }
 
-  .item-name {
+  .card-filename {
     font-size: 12px;
     font-weight: 500;
+    color: var(--text);
     white-space: nowrap;
-    text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 180px;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
   }
 
-  .setting-row {
+  .checkbox-group {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 8px;
   }
 
-  .setting-row label {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  .position-select {
-    padding: 4px 6px;
-    font-size: 11px;
-    border: 1px solid var(--border);
-    background: #FFF;
-    border-radius: 3px;
-  }
-
-  .remove-item-btn {
-    border: none;
-    background: none;
-    font-size: 20px;
-    color: var(--muted);
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
-    padding: 4px 8px;
-    transition: color 0.2s ease;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+    user-select: none;
   }
 
-  .remove-item-btn:hover {
+  .checkbox-row:hover {
+    background: var(--surface);
+  }
+
+  .checkbox-row.checked {
+    background: var(--accent-lt);
     color: #880000;
+    font-weight: 500;
   }
 
-  .empty-message {
-    font-size: 13px;
+  .checkbox-row input[type="checkbox"] {
+    display: none; /* Hide native checkbox to render custom checkmark */
+  }
+
+  .checkmark-box {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--muted);
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    background: #FFF;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+
+  .checkbox-row.checked .checkmark-box {
+    border-color: #880000;
+    background: #880000;
+  }
+
+  .checkbox-row.checked .checkmark-box::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 3px;
+    height: 7px;
+    border: solid #FFF;
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+  }
+
+  .checkbox-label {
+    font-size: 11.5px;
+    line-height: 1.3;
+  }
+
+  /* Sticky Footer */
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    padding: 16px 24px;
+    z-index: 999;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .summary-counters {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .summary-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  .counter-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .counter-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .counter-dot.com { background-color: #ff5252; }
+  .counter-dot.cat { background-color: #ffab40; }
+  .counter-dot.pod { background-color: #40c4ff; }
+  .counter-dot.emp { background-color: #e040fb; }
+  .counter-dot.des { background-color: #69f0ae; }
+  .counter-dot.val { background-color: #ffd740; }
+  .counter-dot.gou = { background-color: #b2ff59; }
+
+  .counter-label {
+    font-size: 11.5px;
     color: var(--muted);
-    text-align: center;
-    margin-top: 40px;
-    line-height: 1.6;
   }
 
-  /* Responsive height adjustment */
-  @media (max-height: 700px) {
-    .organizer-layout {
-      height: 60vh;
-    }
+  .counter-label strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .btn-download-json {
+    background: #880000;
+    color: #FFF;
+    border: none;
+    padding: 12px 24px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+    font-family: var(--font-sans);
+  }
+
+  .btn-download-json:hover {
+    background: #5f0000;
+  }
+
+  /* Zoom Modal */
+  .zoom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  .modal-content-wrap {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    z-index: 10001;
+  }
+
+  .modal-content-wrap img {
+    max-width: 100%;
+    max-height: 80vh;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    object-fit: contain;
+  }
+
+  .close-modal-btn {
+    background: #FFF;
+    border: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .close-modal-btn:hover {
+    background: #eee;
+  }
+
+  .empty-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 40px;
   }
 </style>

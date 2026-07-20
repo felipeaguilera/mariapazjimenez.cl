@@ -30,14 +30,16 @@ try {
     }
 
     return imageList.map((item, index) => {
-      // Find source path (e.g. /raw-images/Fotos.../file.jpg)
-      // Remove leading slash for local fs operations
-      const sourceRelative = item.src.startsWith('/') ? item.src.slice(1) : item.src;
+      // Resolve string paths (e.g. "/raw-images/...")
+      const src = typeof item === 'string' ? item : item.src;
+      const position = typeof item === 'string' ? 'center' : (item.position || 'center');
+
+      const sourceRelative = src.startsWith('/') ? src.slice(1) : src;
       const sourcePath = path.join('./public', sourceRelative);
 
       if (!fs.existsSync(sourcePath)) {
         console.warn(`  Advertencia: No se encontró el archivo origen: ${sourcePath}`);
-        return item; // Fallback to original
+        return { src, position }; // Fallback
       }
 
       // Generate normalized name: src/assets/sectionKey_index.ext
@@ -52,7 +54,7 @@ try {
       // Return configuration object for Astro
       return {
         src: `/src/assets/${targetName}`,
-        position: item.position || 'center'
+        position: position
       };
     });
   };
