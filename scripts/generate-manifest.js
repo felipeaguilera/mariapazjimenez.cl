@@ -4,12 +4,30 @@ import path from 'path';
 const rawImagesDir = './public/raw-images';
 const manifestPath = './src/data/raw-images-manifest.json';
 
+// IMPORTANTE: el orden de este manifiesto define los indices globales que se
+// guardan como seleccion de Maria Paz en /organizer. Si el orden cambia, sus
+// selecciones apuntan a otras fotos.
+//
+// fs.readdirSync() devuelve el orden del sistema de archivos, que NO es igual
+// en Windows (case-insensitive) que en Linux/Netlify (case-sensitive, las
+// mayusculas van primero). Por eso se ordena explicitamente case-insensitive:
+// reproduce el orden original de Windows y es estable en cualquier plataforma.
+//
+// NO cambiar este comparador mientras haya una seleccion activa sin aplicar.
+const sortStable = (a, b) => {
+  const x = a.toLowerCase();
+  const y = b.toLowerCase();
+  return x < y ? -1 : x > y ? 1 : 0;
+};
+
 const getFiles = (dir) => {
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter(file => {
-    const ext = path.extname(file).toLowerCase();
-    return ['.jpg', '.jpeg', '.png', '.webp'].includes(ext);
-  });
+  return fs.readdirSync(dir)
+    .filter(file => {
+      const ext = path.extname(file).toLowerCase();
+      return ['.jpg', '.jpeg', '.png', '.webp'].includes(ext);
+    })
+    .sort(sortStable);
 };
 
 const manifest = {
