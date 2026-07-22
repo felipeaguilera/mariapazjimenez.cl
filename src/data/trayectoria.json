@@ -7,9 +7,50 @@
       "desc": "Desde que creé mi propia empresa en 2007, he tenido múltiples clientes desarrollando gestiones de prensa, organizando lanzamientos de nuevos vinos, organizando ferias de vinos junto a Descorchados. Editando un diario mensual tipo carta de vinos para restaurante Café Turri, uno de mis proyectos más queridos. Inauguré la nueva bodega de vino de viña Lurton en Mendoza. Inauguré en Pelequén la nueva bodega Aventura de Viña Morandé, evento precioso que contó con la excelente gastronomía de Pilar Rodríguez.\n\nRealicé 16 ferias de vinos en Santiago, 2 ferias en Viña del Mar, 2 ferias en Pichilemu (Colchagua) junto con Descorchados, ferias exitosas donde revisé cada detalle.\n\nHoy con mi empresa desarrollo mi proyecto más personal: mi podcast Vinos con MaryPepa (YouTube, Spotify y Apple podcast) donde me siento cómoda y sin presiones para conversar y entrevistar a los protagonistas del vino en Chile y en el mundo.",
       "extended_text": "",
       "images": [
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicaciones+del+Vino+1",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicaciones+del+Vino+2",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicaciones+del+Vino+3"
+        {
+          "src": "/src/assets/mi_empresa_1.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_2.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_3.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_4.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_5.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_6.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_7.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_8.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_9.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_10.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mi_empresa_11.png",
+          "position": "center"
+        }
       ]
     },
     {
@@ -18,9 +59,10 @@
       "desc": "Grandes momentos en Descorchados como productora comercial y ejecutiva. 18 Guías de Vinos. 20 Ferias de Vinos. Muchísimos vinos catados.",
       "extended_text": "",
       "images": [
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Descorchados+1",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Descorchados+2",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Descorchados+3"
+        {
+          "src": "/src/assets/descorchados_1.jpg",
+          "position": "center"
+        }
       ]
     },
     {
@@ -29,8 +71,18 @@
       "desc": "Mi paso por Viña Valdivieso-Licores Mitjans como Relacionadora Pública, fue decidor en mi carrera profesional dedicada al vino. Allí aprendí de vinos, de espumantes y de licores. Soy una convencida que para conocer el mundo de los vinos por dentro, hay que haber trabajado en una viña.",
       "extended_text": "",
       "images": [
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Viña+Valdivieso+1",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Viña+Valdivieso+2"
+        {
+          "src": "/src/assets/vina_valdivieso_1.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/vina_valdivieso_2.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/vina_valdivieso_3.jpg",
+          "position": "center"
+        }
       ]
     },
     {
@@ -38,10 +90,7 @@
       "title": "Revista Gourmand",
       "desc": "Mi primer trabajo. Mi primera pega. Siempre será un recuerdo importante en mi vida profesional haber trabajado con Alex González y todo su equipo. Aquí aprendí a escribir las historias del vino y de la cocina, aprendí de fotografía, de edición y fueron mis inicios en la organización de eventos al participar en las Expogourmand. Nunca me cansaré de decir que haber trabajado en esta importante revista que hoy ya no existe, fue lo mejor que pudo pasar en la vida.",
       "extended_text": "",
-      "images": [
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Revista+Gourmand+1",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Revista+Gourmand+2"
-      ]
+      "images": []
     }
   ]
 }

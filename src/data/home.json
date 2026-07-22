@@ -8,29 +8,146 @@
       "title": "Comunicación & Eventos",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "images": [
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+1",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+2",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+3",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Comunicación+%26+Eventos+4"
+        {
+          "src": "/src/assets/comunicacion_eventos_1.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/comunicacion_eventos_2.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/comunicacion_eventos_3.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/comunicacion_eventos_4.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/comunicacion_eventos_5.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/comunicacion_eventos_6.jpeg",
+          "position": "center"
+        }
       ]
     },
     {
       "title": "Catas & Maridajes",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "images": [
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+1",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+2",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+3",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Catas+%26+Maridajes+4"
+        {
+          "src": "/src/assets/catas_maridajes_1.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_2.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_3.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_4.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_5.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_6.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_7.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_8.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_9.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_10.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_11.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_12.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_13.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_14.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/catas_maridajes_15.png",
+          "position": "center"
+        }
       ]
     },
     {
       "title": "Podcast Vinos con Marypepa",
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "images": [
-        "/assets/img-20250611-wa0031.jpg",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Podcast+Vinos+con+Marypepa+2",
-        "https://placehold.co/1200x800/E4DED4/6B6B6B?text=Podcast+Vinos+con+Marypepa+3"
+        {
+          "src": "/src/assets/podcast_1.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_2.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_3.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_4.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_5.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_6.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_7.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_8.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_9.png",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_10.png",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/podcast_11.webp",
+          "position": "center"
+        }
       ]
     }
   ],

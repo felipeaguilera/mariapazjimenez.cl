@@ -1,10 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const API_URL = "https://keyvalue.immanuel.co/api/KeyVal";
-const APP_KEY = "ecmcx7yj";
-const ITEM_KEY = "selections";
-
+const seedPath = './scripts/seed-selection.json';
 const manifestPath = './src/data/raw-images-manifest.json';
 const assetsDir = './src/assets';
 const homePath = './src/data/home.json';
@@ -15,38 +12,43 @@ if (!fs.existsSync(assetsDir)) {
   fs.mkdirSync(assetsDir, { recursive: true });
 }
 
-function base64urlDecode(str) {
-  if (!str) return '';
-  let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-  while (base64.length % 4) {
-    base64 += '=';
-  }
-  return Buffer.from(base64, 'base64').toString('utf-8');
-}
-
 async function run() {
-  console.log('Conectando con la nube de KeyValue...');
-  
+  const isLocal = process.argv.includes('--local');
   let selections;
-  try {
-    const res = await fetch(`${API_URL}/GetValue/${APP_KEY}/${ITEM_KEY}`);
-    if (!res.ok) {
-      throw new Error(`HTTP error ${res.status}`);
-    }
-    
-    // KeyValue returns string with quotes from json endpoint
-    const encrypted = await res.json();
-    if (!encrypted || encrypted.trim() === "") {
-      console.error('Error: No se encontraron selecciones guardadas en la nube.');
+
+  if (isLocal) {
+    console.log(`Leyendo selección local desde ${seedPath}...`);
+    if (!fs.existsSync(seedPath)) {
+      console.error(`Error: No se encontró el archivo local de selecciones: ${seedPath}`);
       process.exit(1);
     }
-
-    const decrypted = base64urlDecode(encrypted);
-    selections = JSON.parse(decrypted);
-    console.log('✓ Selección descargada con éxito de la nube.');
-  } catch (error) {
-    console.error('Error al descargar la selección desde la nube:', error.message);
-    process.exit(1);
+    try {
+      const raw = JSON.parse(fs.readFileSync(seedPath, 'utf-8'));
+      selections = raw.selecciones || raw;
+      console.log('✓ Selección local cargada con éxito.');
+    } catch (error) {
+      console.error('Error al leer el archivo local de selección:', error.message);
+      process.exit(1);
+    }
+  } else {
+    const ENDPOINT_URL = process.env.SELECTIONS_URL || "https://mariapazjimenezcl.netlify.app/.netlify/functions/selections";
+    console.log(`Conectando con el servidor (${ENDPOINT_URL})...`);
+    try {
+      const res = await fetch(ENDPOINT_URL);
+      if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+      }
+      selections = await res.json();
+      if (!selections || typeof selections !== 'object') {
+        console.error('Error: La respuesta del servidor no es un objeto válido.');
+        process.exit(1);
+      }
+      console.log('✓ Selección descargada con éxito desde la nube.');
+    } catch (error) {
+      console.error('Error al descargar la selección desde la nube:', error.message);
+      console.error('Pista: si quieres usar la selección local guardada en git, ejecuta con el flag --local');
+      process.exit(1);
+    }
   }
 
   // Read manifest to map indices to paths

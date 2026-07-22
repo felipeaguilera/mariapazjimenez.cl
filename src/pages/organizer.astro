@@ -86,9 +86,7 @@ import manifest from '../data/raw-images-manifest.json';
 <script is:inline id="manifest-data" type="application/json" set:html={JSON.stringify(manifest)}></script>
 
 <script>
-  const API_URL = "https://keyvalue.immanuel.co/api/KeyVal";
-  const APP_KEY = "ecmcx7yj";
-  const ITEM_KEY = "selections";
+  const ENDPOINT_URL = "/.netlify/functions/selections";
 
   // Parse manifest
   const manifest = JSON.parse(document.getElementById('manifest-data').textContent);
@@ -139,23 +137,6 @@ import manifest from '../data/raw-images-manifest.json';
     { key: 'vina_valdivieso', label: 'Valdivieso', group: 'Trayectoria' },
     { key: 'revista_gourmand', label: 'Gourmand', group: 'Trayectoria' }
   ];
-
-  // Base64URL encoding/decoding utilities
-  function base64urlEncode(str) {
-    return btoa(unescape(encodeURIComponent(str)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
-  }
-
-  function base64urlDecode(str) {
-    if (!str) return '';
-    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (base64.length % 4) {
-      base64 += '=';
-    }
-    return decodeURIComponent(escape(atob(base64)));
-  }
 
   // DOM Elements
   const photosGrid = document.getElementById('photos-grid');
@@ -242,44 +223,37 @@ import manifest from '../data/raw-images-manifest.json';
     cloudStatusText.className = "status-indicator loading";
     
     try {
-      const res = await fetch(`${API_URL}/GetValue/${APP_KEY}/${ITEM_KEY}`);
+      const res = await fetch(ENDPOINT_URL);
       if (res.ok) {
-        const encrypted = await res.json();
-        if (encrypted && encrypted.trim() !== "") {
-          const decrypted = base64urlDecode(encrypted);
-          const parsed = JSON.parse(decrypted);
-          
-          // NO sobrescribir a ciegas: comparar con el respaldo local.
-          // Si el borrador local tiene mas trabajo que la nube, se conserva
-          // el local y se sube, para no perder una sesion sin guardar.
-          const local = readLocal();
-          const cloudCount = countSelections(parsed);
-          const localCount = countSelections(local);
+        const parsed = await res.json();
+        
+        // NO sobrescribir a ciegas: comparar con el respaldo local.
+        // Si el borrador local tiene mas trabajo que la nube, se conserva
+        // el local y se sube, para no perder una sesion sin guardar.
+        const local = readLocal();
+        const cloudCount = countSelections(parsed);
+        const localCount = countSelections(local);
 
-          if (local && localCount > cloudCount) {
-            Object.keys(selections).forEach(key => {
-              selections[key] = Array.isArray(local[key]) ? local[key] : [];
-            });
-            cloudStatusText.textContent =
-              `Se recuperaron ${localCount} asignaciones de tu ultima sesion. Subiendo a la nube...`;
-            cloudStatusText.className = "status-indicator info";
-            renderGallery();
-            updateCounters();
-            await saveToCloud(true);
-            return;
-          }
-
+        if (local && localCount > cloudCount) {
           Object.keys(selections).forEach(key => {
-            selections[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
+            selections[key] = Array.isArray(local[key]) ? local[key] : [];
           });
-
-          writeLocal(selections);
-          cloudStatusText.textContent = `Sincronizado. ${cloudCount} fotos asignadas. Los cambios se guardan solos.`;
-          cloudStatusText.className = "status-indicator success";
-        } else {
-          cloudStatusText.textContent = "Sin selección previa en la nube. ¡Empieza a elegir!";
+          cloudStatusText.textContent =
+            `Se recuperaron ${localCount} asignaciones de tu ultima sesion. Subiendo a la nube...`;
           cloudStatusText.className = "status-indicator info";
+          renderGallery();
+          updateCounters();
+          await saveToCloud(true);
+          return;
         }
+
+        Object.keys(selections).forEach(key => {
+          selections[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
+        });
+
+        writeLocal(selections);
+        cloudStatusText.textContent = `Sincronizado. ${cloudCount} fotos asignadas. Los cambios se guardan solos.`;
+        cloudStatusText.className = "status-indicator success";
       } else {
         throw new Error();
       }
@@ -313,16 +287,17 @@ import manifest from '../data/raw-images-manifest.json';
     cloudStatusText.textContent = silent ? "Guardando automaticamente..." : "Guardando seleccion en el servidor...";
     cloudStatusText.className = "status-indicator loading";
 
-    const dataString = JSON.stringify(selections);
-    const encrypted = base64urlEncode(dataString);
-
     try {
-      const res = await fetch(`${API_URL}/UpdateValue/${APP_KEY}/${ITEM_KEY}/${encrypted}`, {
-        method: 'POST'
+      const res = await fetch(ENDPOINT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selections)
       });
       if (res.ok) {
         const val = await res.json();
-        if (val === true || val === "True") {
+        if (val && val.ok) {
           writeLocal(selections);
           pendingChanges = false;
           const total = countSelections(selections);
