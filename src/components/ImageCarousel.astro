@@ -7,13 +7,15 @@ interface Props {
   alt?: string;
   autoplay?: boolean;
   interval?: number;
+  ratio?: string; // proporcion del marco, ej "2 / 3" (vertical) o "3 / 2" (horizontal)
 }
 
 const {
   images = [],
   alt = "",
-  autoplay = true,
+  autoplay = false,   // por defecto NO auto-avanza: se invita a hacer clic
   interval = 4000,
+  ratio = "2 / 3",
 } = Astro.props;
 
 // Carga dinamica de las imagenes optimizadas de src/assets
@@ -37,11 +39,16 @@ const resolvedImages = await Promise.all(
 );
 
 const uid = `c${Math.random().toString(36).slice(2, 8)}`;
-const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de puntos
+const many = resolvedImages.length > 10;
+// Dimensiones del marco segun la proporcion pedida
+const [rw, rh] = ratio.split('/').map((n) => parseInt(n.trim(), 10) || 1);
+const isLandscape = rw >= rh;
+const boxW = isLandscape ? 1200 : 800;
+const boxH = isLandscape ? 800 : 1200;
 ---
 
 {resolvedImages.length > 0 && (
-  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval}>
+  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval} style={`aspect-ratio: ${ratio};`}>
     <div class="carousel-track-wrap">
       <ul class="carousel-track">
         {resolvedImages.map((item, i) => (
@@ -49,7 +56,7 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
             {typeof item.img === 'string' ? (
               <img src={item.img} alt={`${alt} ${i + 1}`} style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
             ) : (
-              <Image src={item.img} alt={`${alt} ${i + 1}`} width={800} height={1200} quality={78} format="webp" style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
+              <Image src={item.img} alt={`${alt} ${i + 1}`} width={boxW} height={boxH} quality={78} format="webp" style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
             )}
           </li>
         ))}
@@ -92,6 +99,11 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
     width: 100%;
     height: 100%;
     overflow: hidden;
+    opacity: 0; /* se revela cuando el orden aleatorio ya esta listo */
+  }
+  .carousel.ready .carousel-track-wrap {
+    opacity: 1;
+    transition: opacity 0.3s ease;
   }
 
   .carousel-track {
@@ -103,8 +115,6 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
     transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  /* Clave del arreglo: cada slide ocupa EXACTAMENTE el ancho del contenedor,
-     ni mas ni menos, sin importar el tamano natural de la foto. */
   .carousel-slide {
     flex: 0 0 100%;
     width: 100%;
@@ -126,8 +136,8 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
     transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.85);
     border: none;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -140,10 +150,9 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
     padding: 0;
   }
 
+  /* Las flechas ahora son la forma principal de navegar: mas visibles */
   .carousel:hover .carousel-btn,
   .carousel:focus-within .carousel-btn { opacity: 1; }
-
-  /* En tactil no hay hover: dejar las flechas visibles y tenues */
   @media (hover: none) {
     .carousel-btn { opacity: 0.9; }
   }
@@ -197,23 +206,31 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
   document.querySelectorAll<HTMLElement>('.carousel').forEach((el) => {
     const wrap = el.querySelector<HTMLElement>('.carousel-track-wrap')!;
     const track = el.querySelector<HTMLElement>('.carousel-track')!;
-    const slides = el.querySelectorAll<HTMLElement>('.carousel-slide');
     const dots = el.querySelectorAll<HTMLButtonElement>('.carousel-dot');
     const counter = el.querySelector<HTMLElement>('.carousel-current');
     const prevBtn = el.querySelector<HTMLButtonElement>('.carousel-prev');
     const nextBtn = el.querySelector<HTMLButtonElement>('.carousel-next');
-    const total = slides.length;
     const autoplay = el.dataset.autoplay === 'true';
     const interval = parseInt(el.dataset.interval || '4000', 10);
 
-    if (total <= 1) return;
+    // Orden aleatorio en cada visita: quien no hace clic no ve siempre la misma foto.
+    const slideEls = Array.from(track.querySelectorAll<HTMLElement>('.carousel-slide'));
+    for (let i = slideEls.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [slideEls[i], slideEls[j]] = [slideEls[j], slideEls[i]];
+    }
+    slideEls.forEach((s) => track.appendChild(s));
+    const slides = track.querySelectorAll<HTMLElement>('.carousel-slide');
+    const total = slides.length;
+
+    // Cargar de inmediato la primera foto ya barajada
+    const firstImg = slides[0]?.querySelector('img');
+    if (firstImg) firstImg.loading = 'eager';
 
     let current = 0;
     let timer: ReturnType<typeof setInterval> | null = null;
     let visible = false;
 
-    // Posicionar en pixeles reales del contenedor: nunca se desalinea,
-    // sin importar el ancho de la tarjeta ni el tamano de la foto.
     function place(animate = true) {
       track.style.transition = animate ? '' : 'none';
       track.style.transform = `translateX(-${current * wrap.clientWidth}px)`;
@@ -231,43 +248,35 @@ const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de
     }
 
     function startTimer() {
-      if (!autoplay || !visible || timer) return;
+      if (!autoplay || !visible || timer || total <= 1) return;
       timer = setInterval(() => goTo(current + 1), interval);
     }
-    function stopTimer() {
-      if (timer) { clearInterval(timer); timer = null; }
+    function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+    if (total > 1) {
+      prevBtn?.addEventListener('click', () => { stopTimer(); goTo(current - 1); startTimer(); });
+      nextBtn?.addEventListener('click', () => { stopTimer(); goTo(current + 1); startTimer(); });
+      dots.forEach((dot, i) => dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); }));
+
+      let rz: ReturnType<typeof setTimeout>;
+      window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => place(false), 100); });
+
+      // Autoplay (si se activa) solo cuando el carrusel esta a la vista
+      const io = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+        if (visible) startTimer(); else stopTimer();
+      }, { threshold: 0.25 });
+      io.observe(el);
+
+      let x0 = 0;
+      el.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+      el.addEventListener('touchend', (e) => {
+        const diff = x0 - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) { stopTimer(); goTo(current + (diff > 0 ? 1 : -1)); startTimer(); }
+      }, { passive: true });
     }
 
-    prevBtn?.addEventListener('click', () => { stopTimer(); goTo(current - 1); startTimer(); });
-    nextBtn?.addEventListener('click', () => { stopTimer(); goTo(current + 1); startTimer(); });
-    dots.forEach((dot, i) => dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); }));
-
-    el.addEventListener('mouseenter', stopTimer);
-    el.addEventListener('mouseleave', startTimer);
-
-    // Reposicionar sin animar si cambia el ancho (rotar movil, redimensionar)
-    let rz: ReturnType<typeof setTimeout>;
-    window.addEventListener('resize', () => {
-      clearTimeout(rz);
-      rz = setTimeout(() => place(false), 100);
-    });
-
-    // Solo autoreproducir cuando el carrusel esta a la vista: ahorra CPU y
-    // evita que 6 carruseles corran a la vez fuera de pantalla.
-    const io = new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting;
-      if (visible) startTimer(); else stopTimer();
-    }, { threshold: 0.25 });
-    io.observe(el);
-
-    // Deslizar con el dedo
-    let x0 = 0;
-    el.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-    el.addEventListener('touchend', (e) => {
-      const diff = x0 - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) { stopTimer(); goTo(current + (diff > 0 ? 1 : -1)); startTimer(); }
-    }, { passive: true });
-
     place(false);
+    el.classList.add('ready');
   });
 </script>

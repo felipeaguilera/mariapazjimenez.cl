@@ -31,7 +31,7 @@ const education = [
         {trayectoria.career.map((block, i) => (
           <div class="career-block">
             <div class="block-image-container">
-              <ImageCarousel images={block.images} alt={block.title} />
+              <ImageCarousel images={block.images} alt={block.title} ratio={block.ratio || "2 / 3"} />
             </div>
             <div class="block-content">
               <span class="block-period">{block.period}</span>
