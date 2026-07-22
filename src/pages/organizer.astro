@@ -379,10 +379,11 @@ import manifest from '../data/raw-images-manifest.json';
       card.innerHTML = `
         <div class="card-image-wrap">
           <img src="${item.src}" alt="" loading="lazy" />
+          <span class="id-badge">ID ${item.id}</span>
           <span class="zoom-indicator">Clic para ampliar</span>
         </div>
         <div class="card-content">
-          <div class="card-filename" title="${fileName}">${fileName}</div>
+          <div class="card-filename" title="${fileName}"><strong>ID ${item.id}</strong> · ${fileName}</div>
           <div class="pills-group">
             <span class="pills-group-label">Página de Inicio</span>
             <div class="pills-row">${initPills}</div>
@@ -658,6 +659,22 @@ import manifest from '../data/raw-images-manifest.json';
 
   .card-image-wrap:hover .zoom-indicator {
     opacity: 1;
+  }
+
+  .id-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: rgba(136, 0, 0, 0.92);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 4px 7px;
+    border-radius: 5px;
+    letter-spacing: 0.02em;
+    z-index: 2;
+    pointer-events: none;
   }
 
   .card-content {
