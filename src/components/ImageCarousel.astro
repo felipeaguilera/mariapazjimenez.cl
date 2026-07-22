@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-  images: any[]; // Can be string[] or { src: string; position?: string }[]
+  images: any[]; // string[] o { src: string; position?: string }[]
   alt?: string;
   autoplay?: boolean;
   interval?: number;
@@ -16,31 +16,28 @@ const {
   interval = 4000,
 } = Astro.props;
 
-// Load all images in src/assets dynamically
+// Carga dinamica de las imagenes optimizadas de src/assets
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,WEBP}');
 
-// Resolve image items
 const resolvedImages = await Promise.all(
   images.map(async (item) => {
     const src = typeof item === 'string' ? item : item.src;
     const position = typeof item === 'string' ? 'center' : (item.position || 'center');
 
-    let resolvedImg = src;
-    if (src.startsWith('/src/assets/')) {
+    let resolvedImg: string | ImageMetadata = src;
+    if (typeof src === 'string' && src.startsWith('/src/assets/')) {
       const resolver = imagesGlob[src];
       if (resolver) {
         const mod = await resolver();
         resolvedImg = mod.default;
       }
     }
-    return {
-      img: resolvedImg,
-      position
-    };
+    return { img: resolvedImg, position };
   })
 );
 
 const uid = `c${Math.random().toString(36).slice(2, 8)}`;
+const many = resolvedImages.length > 10; // con muchas fotos, contador en vez de puntos
 ---
 
 {resolvedImages.length > 0 && (
@@ -50,9 +47,9 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
         {resolvedImages.map((item, i) => (
           <li class="carousel-slide" aria-hidden={i !== 0 ? "true" : "false"}>
             {typeof item.img === 'string' ? (
-              <img src={item.img} alt={`${alt} ${i + 1}`} style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} draggable="false" />
+              <img src={item.img} alt={`${alt} ${i + 1}`} style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
             ) : (
-              <Image src={item.img} alt={`${alt} ${i + 1}`} width={800} height={1200} quality={80} format="webp" style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} draggable="false" />
+              <Image src={item.img} alt={`${alt} ${i + 1}`} width={800} height={1200} quality={78} format="webp" style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
             )}
           </li>
         ))}
@@ -67,11 +64,16 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
         <button class="carousel-btn carousel-next" aria-label="Siguiente">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
-        <div class="carousel-dots">
-          {resolvedImages.map((_, i) => (
-            <button class={`carousel-dot${i === 0 ? " active" : ""}`} aria-label={`Imagen ${i + 1}`} data-index={i}></button>
-          ))}
-        </div>
+
+        {many ? (
+          <div class="carousel-counter"><span class="carousel-current">1</span> / {resolvedImages.length}</div>
+        ) : (
+          <div class="carousel-dots">
+            {resolvedImages.map((_, i) => (
+              <button class={`carousel-dot${i === 0 ? " active" : ""}`} aria-label={`Imagen ${i + 1}`} data-index={i}></button>
+            ))}
+          </div>
+        )}
       </>
     )}
   </div>
@@ -83,7 +85,7 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
     width: 100%;
     overflow: hidden;
     background: var(--surface);
-    aspect-ratio: 2 / 3; /* Aspect ratio changed to 2:3 vertical */
+    aspect-ratio: 2 / 3;
   }
 
   .carousel-track-wrap {
@@ -95,15 +97,19 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
   .carousel-track {
     display: flex;
     height: 100%;
+    margin: 0;
+    padding: 0;
     list-style: none;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
+  /* Clave del arreglo: cada slide ocupa EXACTAMENTE el ancho del contenedor,
+     ni mas ni menos, sin importar el tamano natural de la foto. */
   .carousel-slide {
-    min-width: 100%;
+    flex: 0 0 100%;
+    width: 100%;
     height: 100%;
-    flex-shrink: 0;
+    margin: 0;
   }
 
   .carousel-slide img {
@@ -114,7 +120,6 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
     user-select: none;
   }
 
-  /* Prev / Next buttons */
   .carousel-btn {
     position: absolute;
     top: 50%;
@@ -135,18 +140,18 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
     padding: 0;
   }
 
-  .carousel:hover .carousel-btn {
-    opacity: 1;
+  .carousel:hover .carousel-btn,
+  .carousel:focus-within .carousel-btn { opacity: 1; }
+
+  /* En tactil no hay hover: dejar las flechas visibles y tenues */
+  @media (hover: none) {
+    .carousel-btn { opacity: 0.9; }
   }
 
   .carousel-prev { left: 10px; }
   .carousel-next { right: 10px; }
+  .carousel-btn:hover { background: rgba(255, 255, 255, 1); }
 
-  .carousel-btn:hover {
-    background: rgba(255, 255, 255, 1);
-  }
-
-  /* Dots */
   .carousel-dots {
     position: absolute;
     bottom: 10px;
@@ -172,13 +177,29 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
     background: rgba(255, 255, 255, 0.95);
     transform: scale(1.3);
   }
+
+  .carousel-counter {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    z-index: 10;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
 </style>
 
 <script>
   document.querySelectorAll<HTMLElement>('.carousel').forEach((el) => {
+    const wrap = el.querySelector<HTMLElement>('.carousel-track-wrap')!;
     const track = el.querySelector<HTMLElement>('.carousel-track')!;
     const slides = el.querySelectorAll<HTMLElement>('.carousel-slide');
     const dots = el.querySelectorAll<HTMLButtonElement>('.carousel-dot');
+    const counter = el.querySelector<HTMLElement>('.carousel-current');
     const prevBtn = el.querySelector<HTMLButtonElement>('.carousel-prev');
     const nextBtn = el.querySelector<HTMLButtonElement>('.carousel-next');
     const total = slides.length;
@@ -189,44 +210,64 @@ const uid = `c${Math.random().toString(36).slice(2, 8)}`;
 
     let current = 0;
     let timer: ReturnType<typeof setInterval> | null = null;
+    let visible = false;
+
+    // Posicionar en pixeles reales del contenedor: nunca se desalinea,
+    // sin importar el ancho de la tarjeta ni el tamano de la foto.
+    function place(animate = true) {
+      track.style.transition = animate ? '' : 'none';
+      track.style.transform = `translateX(-${current * wrap.clientWidth}px)`;
+      if (!animate) { void track.offsetWidth; track.style.transition = ''; }
+    }
 
     function goTo(idx: number) {
       slides[current].setAttribute('aria-hidden', 'true');
       dots[current]?.classList.remove('active');
       current = (idx + total) % total;
-      track.style.transform = `translateX(-${current * 100}%)`;
+      place();
       slides[current].setAttribute('aria-hidden', 'false');
       dots[current]?.classList.add('active');
+      if (counter) counter.textContent = String(current + 1);
     }
 
     function startTimer() {
-      if (!autoplay) return;
+      if (!autoplay || !visible || timer) return;
       timer = setInterval(() => goTo(current + 1), interval);
     }
-
     function stopTimer() {
       if (timer) { clearInterval(timer); timer = null; }
     }
 
     prevBtn?.addEventListener('click', () => { stopTimer(); goTo(current - 1); startTimer(); });
     nextBtn?.addEventListener('click', () => { stopTimer(); goTo(current + 1); startTimer(); });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); }));
 
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); });
-    });
-
-    // Pause on hover
     el.addEventListener('mouseenter', stopTimer);
     el.addEventListener('mouseleave', startTimer);
 
-    // Touch swipe
-    let touchStartX = 0;
-    el.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    // Reposicionar sin animar si cambia el ancho (rotar movil, redimensionar)
+    let rz: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(rz);
+      rz = setTimeout(() => place(false), 100);
+    });
+
+    // Solo autoreproducir cuando el carrusel esta a la vista: ahorra CPU y
+    // evita que 6 carruseles corran a la vez fuera de pantalla.
+    const io = new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) startTimer(); else stopTimer();
+    }, { threshold: 0.25 });
+    io.observe(el);
+
+    // Deslizar con el dedo
+    let x0 = 0;
+    el.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
     el.addEventListener('touchend', (e) => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
+      const diff = x0 - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 40) { stopTimer(); goTo(current + (diff > 0 ? 1 : -1)); startTimer(); }
     }, { passive: true });
 
-    startTimer();
+    place(false);
   });
 </script>
