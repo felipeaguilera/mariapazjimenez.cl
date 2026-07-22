@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "nextId": 58,
+  "nextId": 71,
   "trabaja_conmigo": {
     "comunicacion_eventos": [
+      {
+        "id": 58,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/0d0ab0cc-32e6-4c14-8532-ff4d86c2b755.JPG"
+      },
       {
         "id": 0,
         "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/115061d7-066c-4984-b259-7e2ee15a3001.JPG"
@@ -60,6 +64,10 @@
         "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/fed77a44-de4a-4c16-892f-7442c64966b1.JPG"
       },
       {
+        "id": 59,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/Imagen de WhatsApp 2025-05-31 a las 20.10.02_8a6f7737.jpg"
+      },
+      {
         "id": 14,
         "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/IMG_5856.jpeg"
       },
@@ -78,6 +86,18 @@
       {
         "id": 18,
         "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/temp_image_CAC7DEE9-A59B-426B-8C43-257F94B1E05E.jpg"
+      },
+      {
+        "id": 60,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/WhatsApp Image 2026-06-28 at 16.28.09 (1).jpeg"
+      },
+      {
+        "id": 61,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/WhatsApp Image 2026-06-28 at 16.28.09 (5).jpeg"
+      },
+      {
+        "id": 62,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Comunicación y Eventos/WhatsApp Image 2026-06-28 at 16.28.47.jpeg"
       }
     ],
     "catas_maridajes": [
@@ -144,6 +164,14 @@
       {
         "id": 34,
         "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Catas & Maridajes/IMG_9409.jpeg"
+      },
+      {
+        "id": 63,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Catas & Maridajes/WhatsApp Image 2026-06-27 at 17.38.39 (1).jpeg"
+      },
+      {
+        "id": 64,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Catas & Maridajes/WhatsApp Image 2026-06-27 at 17.38.54.jpeg"
       }
     ],
     "podcast": [
@@ -222,6 +250,14 @@
       {
         "id": 53,
         "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Podcast Vinos con Marypepa/temp_image_2085AC9D-F329-4F83-836E-707E24732863.WEBP"
+      },
+      {
+        "id": 65,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Podcast Vinos con Marypepa/WhatsApp Image 2026-06-27 at 17.32.37.jpeg"
+      },
+      {
+        "id": 66,
+        "src": "/raw-images/Fotos Web MPJ Trabaja Conmigo/Podcast Vinos con Marypepa/WhatsApp Image 2026-06-27 at 17.42.34.jpeg"
       }
     ]
   },
@@ -247,6 +283,23 @@
         "src": "/raw-images/Fotos Web MPJ Trayectoria/VinaValdivieso/Valdivieso (3).jpg"
       }
     ],
-    "revista_gourmand": []
+    "revista_gourmand": [
+      {
+        "id": 67,
+        "src": "/raw-images/Fotos Web MPJ Trayectoria/RevistaGourmand/Gourmand (1).jpg"
+      },
+      {
+        "id": 68,
+        "src": "/raw-images/Fotos Web MPJ Trayectoria/RevistaGourmand/Gourmand (2).jpg"
+      },
+      {
+        "id": 69,
+        "src": "/raw-images/Fotos Web MPJ Trayectoria/RevistaGourmand/Gourmand (3).jpg"
+      },
+      {
+        "id": 70,
+        "src": "/raw-images/Fotos Web MPJ Trayectoria/RevistaGourmand/Gourmand (4).jpg"
+      }
+    ]
   }
 }
