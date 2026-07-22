@@ -9,27 +9,39 @@
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "images": [
         {
-          "src": "/src/assets/comunicacion_eventos_1.jpg",
+          "src": "/src/assets/mpj-05.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/comunicacion_eventos_2.jpeg",
+          "src": "/src/assets/mpj-10.jpeg",
           "position": "center"
         },
         {
-          "src": "/src/assets/comunicacion_eventos_3.jpg",
+          "src": "/src/assets/mpj-16.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/comunicacion_eventos_4.jpg",
+          "src": "/src/assets/mpj-17.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/comunicacion_eventos_5.jpg",
+          "src": "/src/assets/mpj-18.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/comunicacion_eventos_6.jpeg",
+          "src": "/src/assets/mpj-34.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-60.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-61.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-62.jpeg",
           "position": "center"
         }
       ]
@@ -39,63 +51,75 @@
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "images": [
         {
-          "src": "/src/assets/catas_maridajes_1.jpg",
+          "src": "/src/assets/mpj-19.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_2.jpg",
+          "src": "/src/assets/mpj-01.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_3.jpg",
+          "src": "/src/assets/mpj-02.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_4.jpg",
+          "src": "/src/assets/mpj-03.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_5.jpg",
+          "src": "/src/assets/mpj-07.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_6.jpg",
+          "src": "/src/assets/mpj-09.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_7.jpg",
+          "src": "/src/assets/mpj-13.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_8.jpeg",
+          "src": "/src/assets/mpj-15.jpeg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_9.jpg",
+          "src": "/src/assets/mpj-20.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_10.jpg",
+          "src": "/src/assets/mpj-23.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_11.jpg",
+          "src": "/src/assets/mpj-24.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_12.jpg",
+          "src": "/src/assets/mpj-25.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_13.jpg",
+          "src": "/src/assets/mpj-26.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_14.jpg",
+          "src": "/src/assets/mpj-30.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/catas_maridajes_15.png",
+          "src": "/src/assets/mpj-32.png",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-63.jpeg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-59.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-58.jpg",
           "position": "center"
         }
       ]
@@ -105,47 +129,51 @@
       "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
       "images": [
         {
-          "src": "/src/assets/podcast_1.jpg",
+          "src": "/src/assets/mpj-35.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_2.jpg",
+          "src": "/src/assets/mpj-36.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_3.jpg",
+          "src": "/src/assets/mpj-38.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_4.jpg",
+          "src": "/src/assets/mpj-39.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_5.jpg",
+          "src": "/src/assets/mpj-41.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_6.jpg",
+          "src": "/src/assets/mpj-42.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_7.jpg",
+          "src": "/src/assets/mpj-40.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_8.jpg",
+          "src": "/src/assets/mpj-44.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_9.png",
+          "src": "/src/assets/mpj-48.png",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_10.png",
+          "src": "/src/assets/mpj-50.png",
           "position": "center"
         },
         {
-          "src": "/src/assets/podcast_11.webp",
+          "src": "/src/assets/mpj-53.webp",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-66.jpeg",
           "position": "center"
         }
       ]

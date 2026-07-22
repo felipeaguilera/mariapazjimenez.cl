@@ -8,47 +8,51 @@
       "extended_text": "",
       "images": [
         {
-          "src": "/src/assets/mi_empresa_1.jpg",
+          "src": "/src/assets/mpj-01.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_2.jpg",
+          "src": "/src/assets/mpj-02.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_3.jpg",
+          "src": "/src/assets/mpj-03.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_4.jpg",
+          "src": "/src/assets/mpj-08.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_5.jpg",
+          "src": "/src/assets/mpj-09.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_6.jpeg",
+          "src": "/src/assets/mpj-10.jpeg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_7.jpg",
+          "src": "/src/assets/mpj-16.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_8.jpg",
+          "src": "/src/assets/mpj-17.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_9.jpg",
+          "src": "/src/assets/mpj-18.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_10.jpg",
+          "src": "/src/assets/mpj-25.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/mi_empresa_11.png",
+          "src": "/src/assets/mpj-33.png",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-64.jpeg",
           "position": "center"
         }
       ]
@@ -60,7 +64,7 @@
       "extended_text": "",
       "images": [
         {
-          "src": "/src/assets/descorchados_1.jpg",
+          "src": "/src/assets/mpj-54.jpg",
           "position": "center"
         }
       ]
@@ -72,15 +76,15 @@
       "extended_text": "",
       "images": [
         {
-          "src": "/src/assets/vina_valdivieso_1.jpg",
+          "src": "/src/assets/mpj-56.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/vina_valdivieso_2.jpg",
+          "src": "/src/assets/mpj-55.jpg",
           "position": "center"
         },
         {
-          "src": "/src/assets/vina_valdivieso_3.jpg",
+          "src": "/src/assets/mpj-57.jpg",
           "position": "center"
         }
       ]
@@ -90,7 +94,24 @@
       "title": "Revista Gourmand",
       "desc": "Mi primer trabajo. Mi primera pega. Siempre será un recuerdo importante en mi vida profesional haber trabajado con Alex González y todo su equipo. Aquí aprendí a escribir las historias del vino y de la cocina, aprendí de fotografía, de edición y fueron mis inicios en la organización de eventos al participar en las Expogourmand. Nunca me cansaré de decir que haber trabajado en esta importante revista que hoy ya no existe, fue lo mejor que pudo pasar en la vida.",
       "extended_text": "",
-      "images": []
+      "images": [
+        {
+          "src": "/src/assets/mpj-68.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-69.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-70.jpg",
+          "position": "center"
+        },
+        {
+          "src": "/src/assets/mpj-67.jpg",
+          "position": "center"
+        }
+      ]
     }
   ]
 }

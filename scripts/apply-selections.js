@@ -12,6 +12,12 @@ if (!fs.existsSync(assetsDir)) {
   fs.mkdirSync(assetsDir, { recursive: true });
 }
 
+// Limpiar src/assets antes de repoblar. Evita dejar huerfanos de una
+// seleccion anterior o del esquema de nombres viejo (seccion_indice).
+for (const f of fs.readdirSync(assetsDir)) {
+  fs.rmSync(path.join(assetsDir, f), { force: true });
+}
+
 async function run() {
   const isLocal = process.argv.includes('--local');
   let selections;
@@ -106,14 +112,20 @@ async function run() {
         return { src, position: 'center' };
       }
 
-      // Generate normalized name: src/assets/sectionKey_index.ext
+      // Nombre neutral basado en el ID fijo de la foto (no en la seccion).
+      // Asi una foto asignada a varias secciones es UN solo archivo compartido,
+      // no una copia por seccion. Ej: mpj-09.jpg
       const ext = path.extname(sourcePath).toLowerCase();
-      const targetName = `${sectionKey}_${listIndex + 1}${ext}`;
+      const targetName = `mpj-${String(photoId).padStart(2, '0')}${ext}`;
       const targetPath = path.join(assetsDir, targetName);
 
-      // Copy file
-      fs.copyFileSync(sourcePath, targetPath);
-      console.log(`  Copiado: ${sourcePath} -> ${targetPath}`);
+      // Copiar una sola vez: si otra seccion ya copio esta foto, se reutiliza.
+      if (!fs.existsSync(targetPath)) {
+        fs.copyFileSync(sourcePath, targetPath);
+        console.log(`  Copiado: ${sourcePath} -> ${targetName}`);
+      } else {
+        console.log(`  Reutilizada: ${targetName} (ya presente, compartida entre secciones)`);
+      }
 
       // Return configuration object for Astro
       return {
