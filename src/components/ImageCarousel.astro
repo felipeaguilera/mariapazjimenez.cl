@@ -239,14 +239,43 @@ const boxH = isLandscape ? 800 : 1200;
       }
       slideEls.forEach((s) => track.appendChild(s));
     } else {
+      const cropMode = new URLSearchParams(window.location.search).get('crop') === '1';
+      const positions = ['left', 'center', 'right'];
       slideEls.forEach((s) => {
         const id = s.dataset.photoId;
-        if (id) {
-          const badge = document.createElement('span');
-          badge.className = 'ref-id-badge';
-          badge.textContent = id;
-          s.appendChild(badge);
-        }
+        if (!id) return;
+        const badge = document.createElement('span');
+        badge.className = 'ref-id-badge';
+        badge.textContent = id;
+        s.appendChild(badge);
+
+        // Modo de encuadre: ?ref=1&crop=1. Solo aplica a fotos horizontales
+        // (naturalWidth > naturalHeight), que son las unicas donde el eje
+        // horizontal (izquierda/centro/derecha) tiene efecto visible al
+        // recortarse dentro de un marco vertical. Clic en la foto va rotando
+        // las 3 posiciones para comparar en vivo.
+        if (!cropMode) return;
+        const img = s.querySelector<HTMLImageElement>('img');
+        if (!img) return;
+        let posIdx = 1; // arranca en "center"
+        const render = () => {
+          img.style.objectPosition = `${positions[posIdx]} center`;
+          badge.textContent = `${id} · ${positions[posIdx]}`;
+        };
+        const enableIfLandscape = () => {
+          if (img.naturalWidth > img.naturalHeight) {
+            img.style.cursor = 'pointer';
+            img.title = 'Clic para cambiar el encuadre (izquierda / centro / derecha)';
+            img.addEventListener('click', (e) => {
+              e.preventDefault();
+              posIdx = (posIdx + 1) % positions.length;
+              render();
+            });
+            render();
+          }
+        };
+        if (img.complete) enableIfLandscape();
+        else img.addEventListener('load', enableIfLandscape);
       });
     }
     const slides = track.querySelectorAll<HTMLElement>('.carousel-slide');

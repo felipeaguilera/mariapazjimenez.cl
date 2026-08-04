@@ -25,10 +25,6 @@
           "position": "center"
         },
         {
-          "src": "/src/assets/mpj-18.jpg",
-          "position": "center"
-        },
-        {
           "src": "/src/assets/mpj-34.jpeg",
           "position": "center"
         },
@@ -50,14 +46,6 @@
         },
         {
           "src": "/src/assets/mpj-01.jpg",
-          "position": "center"
-        },
-        {
-          "src": "/src/assets/mpj-02.jpg",
-          "position": "center"
-        },
-        {
-          "src": "/src/assets/mpj-03.jpg",
           "position": "center"
         },
         {
@@ -97,15 +85,7 @@
           "position": "center"
         },
         {
-          "src": "/src/assets/mpj-30.jpg",
-          "position": "center"
-        },
-        {
           "src": "/src/assets/mpj-32.png",
-          "position": "center"
-        },
-        {
-          "src": "/src/assets/mpj-63.jpeg",
           "position": "center"
         },
         {
@@ -160,10 +140,6 @@
         },
         {
           "src": "/src/assets/mpj-53.webp",
-          "position": "center"
-        },
-        {
-          "src": "/src/assets/mpj-66.jpeg",
           "position": "center"
         }
       ]
