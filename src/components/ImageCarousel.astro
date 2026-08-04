@@ -18,6 +18,11 @@ const {
   ratio = "2 / 3",
 } = Astro.props;
 
+// Modo de referencia interno: ?ref=1 en la URL desactiva el orden aleatorio
+// y muestra el ID real de cada foto sobre la imagen. Solo para uso de Felipe
+// al revisar ajustes con Maria Paz, invisible en el uso normal del sitio.
+const refMode = Astro.url.searchParams.get('ref') === '1';
+
 // Carga dinamica de las imagenes optimizadas de src/assets
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,WEBP}');
 
@@ -34,7 +39,9 @@ const resolvedImages = await Promise.all(
         resolvedImg = mod.default;
       }
     }
-    return { img: resolvedImg, position };
+    const idMatch = typeof src === 'string' ? src.match(/([^/]+)\.[a-zA-Z0-9]+$/) : null;
+    const photoId = idMatch ? idMatch[1] : null;
+    return { img: resolvedImg, position, photoId };
   })
 );
 
@@ -47,7 +54,7 @@ const boxH = isLandscape ? 800 : 1200;
 ---
 
 {resolvedImages.length > 0 && (
-  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval} style={`aspect-ratio: ${ratio};`}>
+  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval} data-noshuffle={refMode ? "true" : "false"} style={`aspect-ratio: ${ratio};`}>
     <div class="carousel-track-wrap">
       <ul class="carousel-track">
         {resolvedImages.map((item, i) => (
@@ -56,6 +63,9 @@ const boxH = isLandscape ? 800 : 1200;
               <img src={item.img} alt={`${alt} ${i + 1}`} style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
             ) : (
               <Image src={item.img} alt={`${alt} ${i + 1}`} width={boxW} height={boxH} quality={78} format="webp" style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
+            )}
+            {refMode && item.photoId && (
+              <span class="ref-id-badge">{item.photoId}</span>
             )}
           </li>
         ))}
@@ -111,6 +121,23 @@ const boxH = isLandscape ? 800 : 1200;
     width: 100%;
     height: 100%;
     margin: 0;
+    position: relative;
+  }
+
+  .ref-id-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 15;
+    background: rgba(0, 0, 0, 0.78);
+    color: #fff;
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    pointer-events: none;
   }
 
   .carousel-slide img {
@@ -203,14 +230,18 @@ const boxH = isLandscape ? 800 : 1200;
     const nextBtn = el.querySelector<HTMLButtonElement>('.carousel-next');
     const autoplay = el.dataset.autoplay === 'true';
     const interval = parseInt(el.dataset.interval || '4000', 10);
+    const noShuffle = el.dataset.noshuffle === 'true';
 
     // Orden aleatorio en cada visita: quien no hace clic no ve siempre la misma foto.
+    // Se desactiva en modo de referencia (?ref=1) para poder identificar fotos por ID.
     const slideEls = Array.from(track.querySelectorAll<HTMLElement>('.carousel-slide'));
-    for (let i = slideEls.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [slideEls[i], slideEls[j]] = [slideEls[j], slideEls[i]];
+    if (!noShuffle) {
+      for (let i = slideEls.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [slideEls[i], slideEls[j]] = [slideEls[j], slideEls[i]];
+      }
+      slideEls.forEach((s) => track.appendChild(s));
     }
-    slideEls.forEach((s) => track.appendChild(s));
     const slides = track.querySelectorAll<HTMLElement>('.carousel-slide');
     const total = slides.length;
 
