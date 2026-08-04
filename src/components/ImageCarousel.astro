@@ -246,6 +246,12 @@ const boxH = isLandscape ? 800 : 1200;
         if (!id) return;
         const badge = document.createElement('span');
         badge.className = 'ref-id-badge';
+        // Estilos inline: el CSS scoped de Astro (.ref-id-badge en <style>)
+        // solo se aplica a elementos presentes en el HTML compilado, no a
+        // nodos creados por JS en el cliente como este badge. Sin esto el
+        // badge se veia como texto plano en mitad de la pagina en vez de
+        // superpuesto sobre la foto.
+        badge.style.cssText = 'position:absolute;top:8px;left:8px;z-index:15;background:rgba(0,0,0,.78);color:#fff;font-family:Poppins,system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:4px;pointer-events:none;';
         badge.textContent = id;
         s.appendChild(badge);
 
