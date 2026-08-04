@@ -151,13 +151,39 @@ placeholder hasta que termine la selección.
 
 No inventar ni completar copy sin confirmación de Felipe.
 
-## Pendientes conocidos
+## Preferencias de diseño y comportamiento
 
-- Dos fotos de Viña Valdivieso llegaron en tamaño muy chico (330x220 y 201x251)
-  y el carrusel las agranda a 800x1200, así que se ven borrosas y pesan más que
-  el original. Esa carpeta tiene solo 3 fotos en total.
-- Límite de guardado del servicio KeyValue sin verificar.
-- Falta la limpieza final de `raw-images/` y `organizer.astro`.
+Decisiones ya tomadas sobre cómo se ven y se comportan las fotos. Respetarlas.
+
+- **Carrusel sin autoplay.** Nada se mueve solo. Se navega con las flechas, se
+  invita a hacer clic. No reactivar el auto-avance.
+- **Orden aleatorio por visita.** El carrusel baraja las fotos en cada carga,
+  para que quien no hace clic no vea siempre la misma.
+- **Contador numérico, no puntos.** Todos los sliders muestran "1 / N", nunca dots.
+- **Recorte automático a 2:3.** El sitio recorta solo (object-fit cover, position
+  center). No re-encuadrar cada foto a mano. Para ajustar un recorte puntual, usar
+  el campo `position` (top / center / bottom), no editar el archivo. Solo recortar
+  a mano las excepciones (fotos horizontales que se pierden mucho).
+- **Proporción por bloque.** El carrusel acepta un `ratio` (ej "2 / 3" vertical o
+  "3 / 2" horizontal). Valdivieso va horizontal porque es una sola foto apaisada.
+- **Nombres neutrales `mpj-<id>`.** Las fotos aplicadas se nombran por su ID fijo,
+  no por sección. Una foto en varias secciones es un solo archivo compartido.
+- **IDs visibles en el organizador.** Cada foto muestra su badge "ID N", para
+  poder referirlas por número en vez del nombre de archivo (que no se usa en el sitio).
+
+## Estado y pendientes
+
+- Persistencia del organizador: migrada de KeyValue a **Netlify Blobs** (confiable).
+- Selección final aplicada (56 fotos, nombres `mpj-<id>`). Valdivieso a una foto
+  horizontal, Gourmand reemplazado por versiones en alta resolución.
+- Hero de "Quién soy": swap manual a la foto ID 65 (`public/assets/quien-soy-hero.webp`).
+  Cambiarlo hoy es indicar otro ID, no elegir en el organizador.
+- Pendiente sin urgencia: candado de contraseña del organizador. Plan listo en
+  `PLAN-organizer-password.md` (Netlify Edge Function, gratis).
+- Opción futura: categoría "Quién soy" seleccionable en el organizador, para que
+  María Paz elija el hero ella misma. Hoy es swap manual.
+- Limpieza final cuando todo esté cerrado: quitar `public/raw-images/` y
+  `src/pages/organizer.astro` del sitio público.
 
 ## Qué NO hacer
 
