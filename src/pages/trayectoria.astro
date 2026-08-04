@@ -36,7 +36,9 @@ const education = [
             <div class="block-content">
               <span class="block-period">{block.period}</span>
               <h3 class="block-title">{block.title}</h3>
-              <p class="block-desc">{block.desc}</p>
+              {block.desc.split('\n\n').map((para) => (
+                <p class="block-desc">{para}</p>
+              ))}
               {block.extended_text && (
                 <div class="block-extended" id={`ext-${i}`}>
                   <div class="extended-body" id={`ext-body-${i}`} hidden>

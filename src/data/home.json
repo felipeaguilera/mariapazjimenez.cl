@@ -6,7 +6,7 @@
   "work_cards": [
     {
       "title": "Comunicación & Eventos",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
+      "desc": "Con amplia experiencia en gestión de prensa y en organización de eventos de vinos, catas, ferias de vinos, te ayudo a que tu evento sea un éxito.\n\nEres una <strong>viña</strong> y vas a lanzar un nuevo vino, nueva etiqueta, veámoslo juntos, yo te ayudo.\n\nEres un <strong>Restaurante</strong> y tienes una carta de vinos que quieres potenciar en prensa, veámoslo juntos, yo te ayudo.\n\nTienes una <strong>marca relacionada con el vino, B2B</strong> que quieres potenciar, mostrar, dar a conocer y quieres hacer tu evento, veámoslo juntos, yo te ayudo.\n\n<strong>No eres de la industria del vino</strong> pero quieres hacer una cata de vinos, quieres una reunión de directorio que termine en una cena maridaje, una salida a una viña con tu equipo de la oficina, veámoslo juntos, yo te ayudo.",
       "images": [
         {
           "src": "/src/assets/mpj-05.jpg",
@@ -43,13 +43,7 @@
         {
           "src": "/src/assets/mpj-62.jpeg",
           "position": "center"
-        }
-      ]
-    },
-    {
-      "title": "Catas & Maridajes",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
-      "images": [
+        },
         {
           "src": "/src/assets/mpj-19.jpg",
           "position": "center"
@@ -126,7 +120,7 @@
     },
     {
       "title": "Podcast Vinos con Marypepa",
-      "desc": "Pendiente. 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna.",
+      "desc": "Podcast Vinos con Marypepa. Un podcast para conversar con los protagonistas del vino. <a class=\"text-link\" href=\"https://www.youtube.com/@detripascorazonvinos\" target=\"_blank\" rel=\"noopener noreferrer\">Youtube</a>, <a class=\"text-link\" href=\"https://open.spotify.com/show/5JyFaOSOHuWG1PmKo462ZD?si=c1c5b6991ac34276\" target=\"_blank\" rel=\"noopener noreferrer\">Spotify</a> y <a class=\"text-link\" href=\"https://podcasts.apple.com/us/podcast/vinos-con-marypepa/id1847634180\" target=\"_blank\" rel=\"noopener noreferrer\">Apple Podcast</a>.\n\nSuscríbete a mi canal de youtube <a class=\"text-link\" href=\"https://www.youtube.com/@detripascorazonvinos\" target=\"_blank\" rel=\"noopener noreferrer\">@detripascorazonvinos</a>.\n\nPodcast abierto para toda la industria del vino. Siempre en búsqueda de nuevas historias y nuevos auspiciadores.",
       "images": [
         {
           "src": "/src/assets/mpj-35.jpg",
@@ -175,6 +169,5 @@
       ]
     }
   ],
-  "podcast_desc": "Pendiente: 2–3 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "contact_desc": "Pendiente. 1–2 líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit et dolore magna."
+  "podcast_desc": "No te pierdas todos los viernes un estreno. Conversaciones en torno al vino, junto con sus protagonistas, enólogas y enólogos. Haciendo un salud por el vino y por el vino Chileno."
 }
