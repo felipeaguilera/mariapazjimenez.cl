@@ -53,7 +53,8 @@
         },
         {
           "src": "/src/assets/mpj-09.jpg",
-          "position": "center"
+          "position": "center",
+          "cover": true
         },
         {
           "src": "/src/assets/mpj-13.jpg",
@@ -77,8 +78,7 @@
         },
         {
           "src": "/src/assets/mpj-25.jpg",
-          "position": "center",
-          "cover": true
+          "position": "center"
         },
         {
           "src": "/src/assets/mpj-26.jpg",
