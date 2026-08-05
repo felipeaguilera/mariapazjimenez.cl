@@ -14,6 +14,8 @@ collections:
       - label: "Contenido del inicio"
         name: "home"
         file: "src/data/home.json"
+        editor:
+          preview: false
         fields:
           - label: "Texto Quién soy"
             name: "about_text"
@@ -38,8 +40,10 @@ collections:
               - { label: "Título", name: "title", widget: "string" }
               - label: "Descripción"
                 name: "desc"
-                widget: "text"
-                hint: "2–3 líneas describiendo este área."
+                widget: "markdown"
+                buttons: ["bold", "italic", "link"]
+                minimal: true
+                hint: "2–3 líneas describiendo este área. Usa la barra para negrita, cursiva o agregar un link."
               - label: "Fotos del área"
                 name: "images"
                 widget: "list"
@@ -64,8 +68,10 @@ collections:
 
           - label: "Descripción del podcast"
             name: "podcast_desc"
-            widget: "text"
-            hint: "2–3 líneas sobre el podcast Vinos con Marypepa."
+            widget: "markdown"
+            buttons: ["bold", "italic", "link"]
+            minimal: true
+            hint: "2–3 líneas sobre el podcast Vinos con Marypepa. Usa la barra para negrita, cursiva o agregar un link."
 
   - name: "trayectoria"
     label: "Trayectoria"
@@ -73,6 +79,8 @@ collections:
       - label: "Contenido de trayectoria"
         name: "trayectoria"
         file: "src/data/trayectoria.json"
+        editor:
+          preview: false
         fields:
           - label: "Subtítulo de la página"
             name: "subtitle"

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ImageCarousel from '../components/ImageCarousel.astro';
 import content from '../data/home.json';
+import { mdLiteToHtml } from '../utils/mdlite';
 ---
 
 <Base title="María Paz Jiménez — Periodista y comunicadora de vinos">
@@ -67,7 +68,7 @@ import content from '../data/home.json';
             </div>
             <h3 class="card-title">{card.title}</h3>
             {card.desc.split('\n\n').map((para) => (
-              <p class="card-desc" set:html={para} />
+              <p class="card-desc" set:html={mdLiteToHtml(para)} />
             ))}
           </div>
         ))}
@@ -99,7 +100,7 @@ import content from '../data/home.json';
         </div>
         <h2 class="podcast-title">Sigue Vinos con Marypepa, el Podcast del Vino Chileno</h2>
         {content.podcast_desc.split('\n\n').map((para) => (
-          <p class="podcast-desc" set:html={para} />
+          <p class="podcast-desc" set:html={mdLiteToHtml(para)} />
         ))}
         <div class="podcast-chips">
           <a href="https://www.youtube.com/@detripascorazonvinos" target="_blank" rel="noopener noreferrer" class="btn-outline">
