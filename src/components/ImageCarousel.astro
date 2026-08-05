@@ -25,6 +25,7 @@ const resolvedImages = await Promise.all(
   images.map(async (item) => {
     const src = typeof item === 'string' ? item : item.src;
     const position = typeof item === 'string' ? 'center' : (item.position || 'center');
+    const cover = typeof item === 'string' ? false : !!item.cover;
 
     let resolvedImg: string | ImageMetadata = src;
     if (typeof src === 'string' && src.startsWith('/src/assets/')) {
@@ -36,9 +37,14 @@ const resolvedImages = await Promise.all(
     }
     const idMatch = typeof src === 'string' ? src.match(/([^/]+)\.[a-zA-Z0-9]+$/) : null;
     const photoId = idMatch ? idMatch[1] : null;
-    return { img: resolvedImg, position, photoId };
+    return { img: resolvedImg, position, photoId, cover };
   })
 );
+
+// La foto marcada como "cover" (portada fija) siempre se ordena primero,
+// asi tambien queda como la que carga eager (primer slide visible antes
+// de que el script del cliente decida el orden aleatorio del resto).
+resolvedImages.sort((a, b) => (b.cover ? 1 : 0) - (a.cover ? 1 : 0));
 
 const uid = `c${Math.random().toString(36).slice(2, 8)}`;
 // Dimensiones del marco segun la proporcion pedida
@@ -53,7 +59,7 @@ const boxH = isLandscape ? 800 : 1200;
     <div class="carousel-track-wrap">
       <ul class="carousel-track">
         {resolvedImages.map((item, i) => (
-          <li class="carousel-slide" aria-hidden={i !== 0 ? "true" : "false"} data-photo-id={item.photoId || ''}>
+          <li class="carousel-slide" aria-hidden={i !== 0 ? "true" : "false"} data-photo-id={item.photoId || ''} data-cover={item.cover ? "true" : "false"}>
             {typeof item.img === 'string' ? (
               <img src={item.img} alt={`${alt} ${i + 1}`} style={{ objectPosition: item.position }} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
             ) : (
@@ -231,13 +237,18 @@ const boxH = isLandscape ? 800 : 1200;
 
     // Orden aleatorio en cada visita: quien no hace clic no ve siempre la misma foto.
     // Se desactiva en modo de referencia para poder identificar fotos por ID.
+    // La foto marcada como portada (data-cover="true") queda siempre fija en
+    // el primer lugar, solo se baraja el resto.
     const slideEls = Array.from(track.querySelectorAll<HTMLElement>('.carousel-slide'));
     if (!refMode) {
-      for (let i = slideEls.length - 1; i > 0; i--) {
+      const coverEl = slideEls.find((s) => s.dataset.cover === 'true') || null;
+      const shuffled = coverEl ? slideEls.filter((s) => s !== coverEl) : slideEls.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [slideEls[i], slideEls[j]] = [slideEls[j], slideEls[i]];
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
-      slideEls.forEach((s) => track.appendChild(s));
+      const finalOrder = coverEl ? [coverEl, ...shuffled] : shuffled;
+      finalOrder.forEach((s) => track.appendChild(s));
     } else {
       const cropMode = new URLSearchParams(window.location.search).get('crop') === '1';
       const positions = ['left', 'center', 'right'];
