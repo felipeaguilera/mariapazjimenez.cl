@@ -25,11 +25,6 @@ collections:
             widget: "text"
             hint: "Tu presentación breve. 2–3 líneas, primera persona."
 
-          - label: "Cita destacada"
-            name: "pull_quote"
-            widget: "text"
-            hint: "Una frase tuya. 1–2 líneas."
-
           - label: "Título de la sección Trabaja conmigo"
             name: "work_title"
             widget: "string"
@@ -48,21 +43,29 @@ collections:
               - label: "Fotos del área"
                 name: "images"
                 widget: "list"
-                hint: "Sube entre 3 y 5 fotos. Se muestran como slideshow automático. Recomendado: 1200x800 px, formato JPG/WebP."
-                field:
-                  label: "Foto"
-                  name: "image"
-                  widget: "image"
+                hint: "Agrega o quita fotos de esta sección. Se muestran en orden aleatorio, salvo la que marques como portada."
+                summary: "{{fields.src}}"
+                fields:
+                  - { label: "Foto", name: "src", widget: "image" }
+                  - label: "Portada fija"
+                    name: "cover"
+                    widget: "boolean"
+                    default: false
+                    hint: "Actívalo en una sola foto de la sección para que sea siempre la primera en aparecer. En el resto, déjalo apagado."
+                  - label: "Encuadre"
+                    name: "position"
+                    widget: "select"
+                    default: "center"
+                    options:
+                      - { label: "Centro", value: "center" }
+                      - { label: "Izquierda", value: "left" }
+                      - { label: "Derecha", value: "right" }
+                    hint: "Solo se nota en fotos horizontales anchas. Define qué parte de la foto se ve dentro del marco vertical."
 
           - label: "Descripción del podcast"
             name: "podcast_desc"
             widget: "text"
             hint: "2–3 líneas sobre el podcast Vinos con Marypepa."
-
-          - label: "Texto de contacto"
-            name: "contact_desc"
-            widget: "text"
-            hint: "1–2 líneas de invitación a contactar."
 
   - name: "trayectoria"
     label: "Trayectoria"
@@ -95,8 +98,21 @@ collections:
               - label: "Fotos"
                 name: "images"
                 widget: "list"
-                hint: "Sube entre 2 y 4 fotos de esta etapa. Se muestran como slideshow automático. Recomendado: 1200x800 px."
-                field:
-                  label: "Foto"
-                  name: "image"
-                  widget: "image"
+                hint: "Agrega o quita fotos de esta etapa. Se muestran en orden aleatorio, salvo la que marques como portada."
+                summary: "{{fields.src}}"
+                fields:
+                  - { label: "Foto", name: "src", widget: "image" }
+                  - label: "Portada fija"
+                    name: "cover"
+                    widget: "boolean"
+                    default: false
+                    hint: "Actívalo en una sola foto de esta etapa para que sea siempre la primera en aparecer. En el resto, déjalo apagado."
+                  - label: "Encuadre"
+                    name: "position"
+                    widget: "select"
+                    default: "center"
+                    options:
+                      - { label: "Centro", value: "center" }
+                      - { label: "Izquierda", value: "left" }
+                      - { label: "Derecha", value: "right" }
+                    hint: "Solo se nota en fotos horizontales anchas. Define qué parte de la foto se ve dentro del marco vertical."
