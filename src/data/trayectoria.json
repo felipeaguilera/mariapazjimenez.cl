@@ -9,7 +9,8 @@
       "images": [
         {
           "src": "/src/assets/mpj-01.jpg",
-          "position": "center"
+          "position": "center",
+          "cover": true
         },
         {
           "src": "/src/assets/mpj-08.jpg",
@@ -47,7 +48,8 @@
           "src": "/src/assets/mpj-54.jpg",
           "position": "center"
         }
-      ]
+      ],
+      "desktopRatio": "3 / 2"
     },
     {
       "period": "2002 · 2006",

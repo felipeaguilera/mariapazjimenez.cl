@@ -8,6 +8,7 @@ interface Props {
   autoplay?: boolean;
   interval?: number;
   ratio?: string; // proporcion del marco, ej "2 / 3" (vertical) o "3 / 2" (horizontal)
+  desktopRatio?: string; // proporcion opcional que reemplaza a "ratio" solo en desktop (768px+)
 }
 
 const {
@@ -16,6 +17,7 @@ const {
   autoplay = false,   // por defecto NO auto-avanza: se invita a hacer clic
   interval = 4000,
   ratio = "2 / 3",
+  desktopRatio = ratio,
 } = Astro.props;
 
 // Carga dinamica de las imagenes optimizadas de src/assets
@@ -55,7 +57,7 @@ const boxH = isLandscape ? 800 : 1200;
 ---
 
 {resolvedImages.length > 0 && (
-  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval} style={`aspect-ratio: ${ratio};`}>
+  <div class="carousel" id={uid} data-autoplay={autoplay ? "true" : "false"} data-interval={interval}>
     <div class="carousel-track-wrap">
       <ul class="carousel-track">
         {resolvedImages.map((item, i) => (
@@ -85,13 +87,26 @@ const boxH = isLandscape ? 800 : 1200;
   </div>
 )}
 
-<style>
+<style define:vars={{ ratio, desktopRatio }}>
+  /* aspect-ratio ahora se define por CSS var (antes iba inline en el div).
+     Permite forzar una proporcion distinta solo en desktop (ej. horizontal
+     3/2 en vez de vertical 2/3) sin tocar el marco en mobile, algo que un
+     estilo inline no puede hacer porque siempre gana por especificidad
+     sobre cualquier regla de la hoja de estilos, incluida una en @media.
+     define:vars inyecta las variables en esta instancia puntual del
+     carrusel, asi que no afecta a otros usos del mismo componente. */
   .carousel {
     position: relative;
     width: 100%;
     overflow: hidden;
     background: var(--surface);
-    aspect-ratio: 2 / 3;
+    aspect-ratio: var(--ratio);
+  }
+
+  @media (min-width: 768px) {
+    .carousel {
+      aspect-ratio: var(--desktopRatio);
+    }
   }
 
   .carousel-track-wrap {
